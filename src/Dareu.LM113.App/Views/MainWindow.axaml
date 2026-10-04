@@ -3,173 +3,214 @@
         xmlns:vm="using:Dareu.LM113.App.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="920" d:DesignHeight="640"
+        mc:Ignorable="d" d:DesignWidth="840" d:DesignHeight="650"
         x:Class="Dareu.LM113.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="avares://Dareu.LM113.App/Assets/app.ico"
-        Title="达尔优 LM113 发光鼠标 跨平台驱动"
-        Width="960" Height="660"
+        Title="达尔优 LM113 发光鼠标 跨平台驱动客户端"
+        Width="840" Height="650"
         WindowStartupLocation="CenterScreen"
-        CanResize="false">
+        CanResize="false"
+        Background="{StaticResource BrushBgDeep}">
 
-    <Grid RowDefinitions="Auto,*,Auto" Background="#1E1E24">
-        <!-- 顶部状态栏 -->
-        <Border Grid.Row="0" Background="#282830" Padding="16,12" BorderBrush="#383842" BorderThickness="0,0,0,1">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- 顶部品牌与状态 Header -->
+        <Border Grid.Row="0" Background="#181822" Padding="20,14" BorderBrush="{StaticResource BrushBorderSubtle}" BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="Auto,*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                    <Image Source="avares://Dareu.LM113.App/Assets/logo.png" Width="22" Height="22" VerticalAlignment="Center" />
-                    <Ellipse Width="10" Height="10" Fill="{Binding IsConnected, Converter={x:Null}}" 
-                             Classes.connected="{Binding IsConnected}" Classes.disconnected="{Binding !IsConnected}">
-                        <Ellipse.Styles>
-                            <Style Selector="Ellipse.connected">
-                                <Setter Property="Fill" Value="#4CAF50" />
+                <!-- 左侧设备与连接状态 -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                    <Image Source="avares://Dareu.LM113.App/Assets/logo.png" Width="26" Height="26" VerticalAlignment="Center" />
+                    <Border Width="10" Height="10" CornerRadius="5" VerticalAlignment="Center">
+                        <Border.Styles>
+                            <Style Selector="Border">
+                                <Setter Property="Background" Value="#F44336" />
                             </Style>
-                            <Style Selector="Ellipse.disconnected">
-                                <Setter Property="Fill" Value="#F44336" />
+                            <Style Selector="Border.connected">
+                                <Setter Property="Background" Value="#00F5A0" />
+                                <Setter Property="BoxShadow" Value="0 0 8 0 #8000F5A0" />
                             </Style>
-                        </Ellipse.Styles>
-                    </Ellipse>
-                    <TextBlock Text="{Binding DeviceInfoText}" FontWeight="Bold" FontSize="14" Foreground="#E0E0E0" VerticalAlignment="Center" />
+                        </Border.Styles>
+                        <Classes.connected>
+                            <Binding Path="IsConnected" />
+                        </Classes.connected>
+                    </Border>
+                    <StackPanel Spacing="2" VerticalAlignment="Center">
+                        <TextBlock Text="DAREU LM113" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
+                        <TextBlock Text="{Binding DeviceInfoText}" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
+                    </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
-                    <Button Content="扫描连接" Command="{Binding AutoConnectCommand}" />
-                    <Button Content="导入 p1.bin" Command="{Binding ImportOriginalP1Command}" />
-                    <Button Content="恢复出厂" Command="{Binding FactoryResetCommand}" Foreground="#FF7043" />
+                <!-- 右侧快捷功能胶囊按钮 -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <Button Classes="sub-action" Content="扫描连接" Command="{Binding AutoConnectCommand}" />
+                    <Button Classes="sub-action" Content="导入 p1.bin" Command="{Binding ImportOriginalP1Command}" />
+                    <Button Classes="danger-action" Content="恢复出厂" Command="{Binding FactoryResetCommand}" />
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- 主体区域 (左侧鼠标预览，右侧功能面板) -->
-        <Grid Grid.Row="1" ColumnDefinitions="360,*" Margin="16">
-            <!-- 左侧鼠标展示 -->
-            <Border Grid.Column="0" Background="#25252D" CornerRadius="8" Padding="16" Margin="0,0,8,0">
-                <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Grid.Row="0" Text="DAREU LM113" FontSize="18" FontWeight="Bold" Foreground="#00E5FF" HorizontalAlignment="Center" />
-                    <Image Grid.Row="1" Source="/Assets/mouse_main.png" Margin="10" Stretch="Uniform" />
-                    <Border Grid.Row="2" Background="#1E1E24" CornerRadius="6" Padding="12">
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="按键分配概览" FontWeight="Bold" FontSize="12" Foreground="#A0A0A0" />
-                            <TextBlock Text="1: 左键  |  2: 右键  |  3: 中键滚轮" FontSize="11" Foreground="#CCCCCC" />
-                            <TextBlock Text="4: 侧键前进  |  5: 侧键后退" FontSize="11" Foreground="#CCCCCC" />
-                            <TextBlock Text="6: DPI 循回切换 (多段自定义)" FontSize="11" Foreground="#00E5FF" />
-                        </StackPanel>
-                    </Border>
-                </Grid>
-            </Border>
-
-            <!-- 右侧配置选项卡 -->
-            <Border Grid.Column="1" Background="#25252D" CornerRadius="8" Padding="12" Margin="8,0,0,0">
-                <TabControl>
-                    <!-- DPI 页面 -->
-                    <TabItem Header="DPI 灵敏度">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <StackPanel Spacing="14" Margin="6,12">
-                                <TextBlock Text="DPI 档位自定义 (400 - 6000 DPI)" FontWeight="Bold" FontSize="14" Foreground="#E0E0E0" />
-                                
-                                <ItemsControl ItemsSource="{Binding DpiStages}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="vm:DpiStageItemViewModel">
-                                            <Border Background="#2E2E38" CornerRadius="6" Padding="10,6" Margin="0,3">
-                                                <Grid ColumnDefinitions="70,80,*,40">
-                                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsEnabled}" Content="{Binding StageLabel}" />
-                                                    <TextBlock Grid.Column="1" Text="{Binding DpiText}" FontWeight="Bold" VerticalAlignment="Center" Foreground="#00E5FF" />
-                                                    <Slider Grid.Column="2" Minimum="250" Maximum="6000" Value="{Binding Dpi}" TickFrequency="50" IsSnapToTickEnabled="True" Margin="8,0" VerticalAlignment="Center" />
-                                                    <Border Grid.Column="3" Width="28" Height="18" CornerRadius="3" Background="{Binding DisplayColor}" BorderBrush="#555" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Center" />
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-
-                                <Separator Background="#383842" Margin="0,6" />
-
-                                <Grid ColumnDefinitions="Auto,*">
-                                    <TextBlock Grid.Column="0" Text="USB 报告率 (Polling Rate):" VerticalAlignment="Center" Margin="0,0,16,0" FontWeight="Bold" />
-                                    <ComboBox Grid.Column="1" ItemsSource="{Binding PollingRateOptions}" SelectedIndex="{Binding SelectedPollingRateIndex}" HorizontalAlignment="Stretch" />
-                                </Grid>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </TabItem>
-
-                    <!-- 灯光控制页面 -->
-                    <TabItem Header="RGB 灯光">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <StackPanel Spacing="14" Margin="6,12">
-                                <TextBlock Text="灯效模式与速度" FontWeight="Bold" FontSize="14" Foreground="#E0E0E0" />
-                                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Margin="0,4">
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="灯效模式:" VerticalAlignment="Center" Margin="0,0,16,8" />
-                                    <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding LightingModeOptions}" SelectedIndex="{Binding SelectedLightingModeIndex}" HorizontalAlignment="Stretch" Margin="0,0,0,8" />
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="动态速度:" VerticalAlignment="Center" Margin="0,0,16,0" />
-                                    <Slider Grid.Row="1" Grid.Column="1" Minimum="1" Maximum="3" Value="{Binding LightingSpeed}" IsSnapToTickEnabled="True" TickFrequency="1" />
-                                </Grid>
-
-                                <Separator Background="#383842" Margin="0,6" />
-
-                                <TextBlock Text="快捷预设色彩 (点击即时生效)" FontWeight="Bold" FontSize="13" Foreground="#E0E0E0" />
-                                <WrapPanel Margin="0,4">
-                                    <Button Background="#FF0000" Content="红" Width="44" Height="32" Margin="3" Command="{Binding SetColorPresetCommand}" CommandParameter="FF0000" />
-                                    <Button Background="#00FF00" Content="绿" Width="44" Height="32" Margin="3" Foreground="#000" Command="{Binding SetColorPresetCommand}" CommandParameter="00FF00" />
-                                    <Button Background="#0000FF" Content="蓝" Width="44" Height="32" Margin="3" Command="{Binding SetColorPresetCommand}" CommandParameter="0000FF" />
-                                    <Button Background="#FFFF00" Content="黄" Width="44" Height="32" Margin="3" Foreground="#000" Command="{Binding SetColorPresetCommand}" CommandParameter="FFFF00" />
-                                    <Button Background="#00FFFF" Content="青" Width="44" Height="32" Margin="3" Foreground="#000" Command="{Binding SetColorPresetCommand}" CommandParameter="00FFFF" />
-                                    <Button Background="#FF00FF" Content="紫" Width="44" Height="32" Margin="3" Command="{Binding SetColorPresetCommand}" CommandParameter="FF00FF" />
-                                    <Button Background="#FF4500" Content="橙" Width="44" Height="32" Margin="3" Command="{Binding SetColorPresetCommand}" CommandParameter="FF4500" />
-                                    <Button Background="#FFFFFF" Content="白" Width="44" Height="32" Margin="3" Foreground="#000" Command="{Binding SetColorPresetCommand}" CommandParameter="FFFFFF" />
-                                </WrapPanel>
-
-                                <Separator Background="#383842" Margin="0,6" />
-
-                                <TextBlock Text="自定义 RGB 分量调节" FontWeight="Bold" FontSize="13" Foreground="#E0E0E0" />
-                                <Grid ColumnDefinitions="30,*,40" RowDefinitions="Auto,Auto,Auto" Margin="0,4">
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="R" Foreground="#FF5252" VerticalAlignment="Center" FontWeight="Bold" />
-                                    <Slider Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedRed}" Margin="8,0" />
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedRed}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="G" Foreground="#69F0AE" VerticalAlignment="Center" FontWeight="Bold" />
-                                    <Slider Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedGreen}" Margin="8,0" />
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedGreen}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="B" Foreground="#448AFF" VerticalAlignment="Center" FontWeight="Bold" />
-                                    <Slider Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedBlue}" Margin="8,0" />
-                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding SelectedBlue}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                                </Grid>
-
-                                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,6">
-                                    <CheckBox IsChecked="{Binding SwapGreenAndBlue}" Content="启用硬件 RBG 通道引脚适配" />
-                                    <Button Content="仅测试此灯光" Command="{Binding ApplyLightingCommand}" Background="#37474F" />
+        <!-- 主体全宽控制中心卡片 (移除原有空置左栏，舒展呈现) -->
+        <Border Grid.Row="1" Margin="20,16" Classes="card" Padding="18">
+            <TabControl TabStripPlacement="Top">
+                <!-- ==================== DPI 灵敏度页面 ==================== -->
+                <TabItem Header="⚡ DPI 灵敏度">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="16" Margin="4,16,4,4">
+                            <!-- 标题与副标题 -->
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Spacing="3">
+                                    <TextBlock Text="6 档 DPI 曲线调节" FontWeight="Bold" FontSize="15" Foreground="#FFFFFF" />
+                                    <TextBlock Text="勾选启用档位，拖动滑块即可精细微调各档 DPI（200 ~ 6400）" FontSize="12" Foreground="#8E8EA0" />
                                 </StackPanel>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </TabItem>
+                            </Grid>
 
-                    <!-- 系统与跨平台说明 -->
-                    <TabItem Header="系统与关于">
-                        <StackPanel Spacing="12" Margin="6,12">
-                            <TextBlock Text="跨平台支持与免驱说明" FontWeight="Bold" FontSize="14" Foreground="#00E5FF" />
-                            <TextBlock Text="本驱动采用纯 C# .NET 10 + HidSharp 实现，完全跨平台支持 Windows、Linux 及 macOS。" TextWrapping="Wrap" />
-                            
-                            <Border Background="#1E1E24" CornerRadius="6" Padding="12" Margin="0,6">
-                                <StackPanel Spacing="6">
-                                    <TextBlock Text="Linux 系统免 Root 使用提示 (udev 规则):" FontWeight="Bold" Foreground="#FFA726" />
-                                    <TextBlock Text="Linux 默认仅 root 拥有原始 HID 读写权限。若在 Linux 下无法识别，请将规则文件复制到系统：" TextWrapping="Wrap" FontSize="12" />
-                                    <TextBox Text="echo 'SUBSYSTEM==&quot;hidraw&quot;, ATTRS{idVendor}==&quot;260d&quot;, MODE=&quot;0666&quot;' | sudo tee /etc/udev/rules.d/99-dareu.rules &amp;&amp; sudo udevadm control --reload" IsReadOnly="True" FontSize="11" />
+                            <!-- DPI 6 档自定义卡片列表 -->
+                            <ItemsControl ItemsSource="{Binding DpiStages}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="vm:DpiStageItemViewModel">
+                                        <Border Background="#161620" CornerRadius="8" Padding="14,10" Margin="0,4" BorderBrush="#252536" BorderThickness="1">
+                                            <Grid ColumnDefinitions="90,110,*,44">
+                                                <!-- 档位启用勾选 -->
+                                                <CheckBox Grid.Column="0" IsChecked="{Binding IsEnabled}" Content="{Binding StageLabel}" FontWeight="SemiBold" FontSize="13" />
+                                                <!-- DPI 数值展示 (等宽硬核字体) -->
+                                                <TextBlock Grid.Column="1" Text="{Binding DpiText}" Classes="mono" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Foreground="#00F5A0" />
+                                                <!-- DPI 滑块 -->
+                                                <Slider Grid.Column="2" Minimum="200" Maximum="6400" Value="{Binding Dpi}" TickFrequency="100" IsSnapToTickEnabled="True" Margin="12,0" VerticalAlignment="Center" />
+                                                <!-- 档位对应 RGB 颜色预览指示条 -->
+                                                <Border Grid.Column="3" Width="32" Height="20" CornerRadius="4" Background="{Binding DisplayColor}" BorderBrush="#3E3E52" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- USB 回报率调节卡片 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,12" Margin="0,6,0,0" BorderBrush="#252536" BorderThickness="1">
+                                <Grid ColumnDefinitions="Auto,*,220">
+                                    <TextBlock Grid.Column="0" Text="USB 报告率 (Polling Rate):" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="13" Foreground="#FFFFFF" />
+                                    <TextBlock Grid.Column="1" Text="推荐竞技游戏设为 1000 Hz" VerticalAlignment="Center" Margin="12,0,0,0" FontSize="12" Foreground="#8E8EA0" />
+                                    <ComboBox Grid.Column="2" ItemsSource="{Binding PollingRateOptions}" SelectedIndex="{Binding SelectedPollingRateIndex}" HorizontalAlignment="Stretch" />
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- ==================== RGB 幻彩灯光页面 ==================== -->
+                <TabItem Header="🌈 RGB 幻彩灯光">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="16" Margin="4,16,4,4">
+                            <!-- 灯效模式与动态速度卡片 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
+                                <StackPanel Spacing="14">
+                                    <TextBlock Text="灯效模式与速度控制" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
+                                    <Grid ColumnDefinitions="Auto,*,Auto,160" RowDefinitions="Auto">
+                                        <TextBlock Grid.Column="0" Text="灯效模式:" VerticalAlignment="Center" Margin="0,0,12,0" FontWeight="SemiBold" />
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding LightingModeOptions}" SelectedIndex="{Binding SelectedLightingModeIndex}" HorizontalAlignment="Stretch" Margin="0,0,24,0" />
+
+                                        <TextBlock Grid.Column="2" Text="动态速度:" VerticalAlignment="Center" Margin="0,0,12,0" FontWeight="SemiBold" />
+                                        <Slider Grid.Column="3" Minimum="1" Maximum="3" Value="{Binding LightingSpeed}" IsSnapToTickEnabled="True" TickFrequency="1" VerticalAlignment="Center" />
+                                    </Grid>
                                 </StackPanel>
                             </Border>
 
-                            <TextBlock Text="作者: VincentZyu233 | 开源协议: MIT" FontSize="12" Foreground="#888" Margin="0,8" />
-                        </StackPanel>
-                    </TabItem>
-                </TabControl>
-            </Border>
-        </Grid>
+                            <!-- 快捷预设色彩卡片 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Text="极客经典预设色 (点击即刻生效)" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
+                                    <WrapPanel Margin="0,4">
+                                        <Button Background="#FF1744" Content="热烈红" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Command="{Binding SetColorPresetCommand}" CommandParameter="FF0000" />
+                                        <Button Background="#00E676" Content="极客绿" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Foreground="#000000" Command="{Binding SetColorPresetCommand}" CommandParameter="00FF00" />
+                                        <Button Background="#2979FF" Content="深邃蓝" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Command="{Binding SetColorPresetCommand}" CommandParameter="0000FF" />
+                                        <Button Background="#FFEA00" Content="活力黄" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Foreground="#000000" Command="{Binding SetColorPresetCommand}" CommandParameter="FFFF00" />
+                                        <Button Background="#00E5FF" Content="赛博青" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Foreground="#000000" Command="{Binding SetColorPresetCommand}" CommandParameter="00FFFF" />
+                                        <Button Background="#D500F9" Content="幻影紫" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Command="{Binding SetColorPresetCommand}" CommandParameter="FF00FF" />
+                                        <Button Background="#FF6D00" Content="烈焰橙" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Command="{Binding SetColorPresetCommand}" CommandParameter="FF4500" />
+                                        <Button Background="#FFFFFF" Content="纯净白" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Foreground="#000000" Command="{Binding SetColorPresetCommand}" CommandParameter="FFFFFF" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
 
-        <!-- 底部保存下发按钮与状态 -->
-        <Border Grid.Row="2" Background="#282830" Padding="16,10" BorderBrush="#383842" BorderThickness="0,1,0,0">
+                            <!-- 自定义 RGB 独立色彩分量卡片 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="自定义 RGB 三原色微调" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
+                                    <Grid ColumnDefinitions="36,*,50" RowDefinitions="Auto,Auto,Auto" Margin="0,4">
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="R" Foreground="#FF4D6D" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" />
+                                        <Slider Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedRed}" Margin="10,0" />
+                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedRed}" Classes="mono" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14" Foreground="#FF4D6D" />
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="G" Foreground="#00F5A0" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" />
+                                        <Slider Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedGreen}" Margin="10,0" />
+                                        <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedGreen}" Classes="mono" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14" Foreground="#00F5A0" />
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="B" Foreground="#4D96FF" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" />
+                                        <Slider Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedBlue}" Margin="10,0" />
+                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding SelectedBlue}" Classes="mono" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14" Foreground="#4D96FF" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 硬件校准与即时测试 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,12" BorderBrush="#252536" BorderThickness="1">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="2">
+                                        <CheckBox IsChecked="{Binding SwapGreenAndBlue}" Content="启用硬件 RBG 物理通道反转适配" FontWeight="SemiBold" FontSize="13" />
+                                        <TextBlock Text="已实测校准：达尔优 LM113 硬件 PCB 的绿与蓝通道物理互换" FontSize="11" Foreground="#8E8EA0" Margin="28,0,0,0" />
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Classes="sub-action" Content="仅测试此灯效" Command="{Binding ApplyLightingCommand}" />
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- ==================== 系统与跨平台说明 ==================== -->
+                <TabItem Header="⚙️ 系统与关于">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="16" Margin="4,16,4,4">
+                            <!-- 跨平台架构说明 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="纯 C# 原生跨平台驱动架构" FontWeight="Bold" FontSize="14" Foreground="#7B61FF" />
+                                    <TextBlock Text="本驱动采用纯 C# .NET 10 + HidSharp 协议引擎深度重构，彻底移除了对 Windows 原版专有闭源 DLL 的依赖，无缝支持 Windows、Linux 及 macOS 系统。" TextWrapping="Wrap" FontSize="12" Foreground="#C0C0D0" />
+                                    <TextBlock Text="完整逆向荣腾科技（RoNgtEng）通信协议混淆算法，实现 9 字节 Feature Report 硬件级直控。" TextWrapping="Wrap" FontSize="12" Foreground="#8E8EA0" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Linux udev 权限配置提示 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="🐧 Linux 系统免 Root 使用提示 (udev 规则)" FontWeight="Bold" FontSize="14" Foreground="#00F5A0" />
+                                    <TextBlock Text="Linux 系统默认普通用户无权读写原始 HID 节点。安装 deb/rpm 包已自动配置；如使用绿色便携包，可执行以下命令：" TextWrapping="Wrap" FontSize="12" Foreground="#C0C0D0" />
+                                    <TextBox Text="echo 'SUBSYSTEM==&quot;hidraw&quot;, ATTRS{idVendor}==&quot;260d&quot;, MODE=&quot;0666&quot;' | sudo tee /etc/udev/rules.d/99-dareu.rules &amp;&amp; sudo udevadm control --reload" IsReadOnly="True" Classes="mono" FontSize="11" Margin="0,4" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 关于与版权 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel Grid.Column="0" Spacing="4">
+                                        <TextBlock Text="DAREU LM113 Mouse Driver Client" FontWeight="Bold" FontSize="13" Foreground="#FFFFFF" />
+                                        <TextBlock Text="版本: v0.2.0-beta.2  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" Text="Crafted with ❤️ by VincentZyu &amp; Gemini" FontSize="12" Foreground="#7B61FF" VerticalAlignment="Center" FontWeight="SemiBold" />
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </Border>
+
+        <!-- 底部状态栏与保存下发 -->
+        <Border Grid.Row="2" Background="#181822" Padding="20,12" BorderBrush="{StaticResource BrushBorderSubtle}" BorderThickness="0,1,0,0">
             <Grid ColumnDefinitions="*,Auto">
-                <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" VerticalAlignment="Center" Foreground="#B0BEC5" />
-                <Button Grid.Column="1" Content="应用并保存到鼠标" Command="{Binding ApplyAllCommand}" Background="#00B0FF" Foreground="#000" FontWeight="Bold" Padding="20,8" CornerRadius="4" />
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="状态:" FontSize="12" Foreground="#8E8EA0" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="#C0C0D8" FontWeight="SemiBold" VerticalAlignment="Center" />
+                </StackPanel>
+                <Button Grid.Column="1" Classes="primary-action" Content="应用并保存到鼠标" Command="{Binding ApplyAllCommand}" />
             </Grid>
         </Border>
     </Grid>

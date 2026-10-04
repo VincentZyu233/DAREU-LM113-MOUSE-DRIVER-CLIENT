@@ -2,7 +2,124 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Dareu.LM113.App.App"
              RequestedThemeVariant="Dark">
+
+    <Application.Resources>
+        <!-- 字体体系：嵌入 HarmonyOS Sans SC 与 JetBrains Mono，全平台高质感排版 -->
+        <FontFamily x:Key="MainFont">avares://Dareu.LM113.App/Assets/Fonts#HarmonyOS Sans SC, HarmonyOS Sans SC, MiSans, Microsoft YaHei UI, PingFang SC, Noto Sans CJK SC, sans-serif</FontFamily>
+        <FontFamily x:Key="MonoFont">avares://Dareu.LM113.App/Assets/Fonts#JetBrains Mono, Cascadia Code, Consolas, monospace</FontFamily>
+
+        <!-- 达尔优品牌专属色彩体系 (科技深紫 + 极客霓虹绿) -->
+        <Color x:Key="ColorBgDeep">#13131A</Color>
+        <Color x:Key="ColorBgCard">#1C1C26</Color>
+        <Color x:Key="ColorBgCardHover">#242432</Color>
+        <Color x:Key="ColorBorderSubtle">#2E2E3E</Color>
+        <Color x:Key="ColorBorderActive">#7B61FF</Color>
+
+        <Color x:Key="ColorPurple">#7B61FF</Color>
+        <Color x:Key="ColorNeonGreen">#00F5A0</Color>
+        <Color x:Key="ColorCyan">#00E5FF</Color>
+
+        <SolidColorBrush x:Key="BrushBgDeep" Color="{StaticResource ColorBgDeep}" />
+        <SolidColorBrush x:Key="BrushBgCard" Color="{StaticResource ColorBgCard}" />
+        <SolidColorBrush x:Key="BrushBgCardHover" Color="{StaticResource ColorBgCardHover}" />
+        <SolidColorBrush x:Key="BrushBorderSubtle" Color="{StaticResource ColorBorderSubtle}" />
+        <SolidColorBrush x:Key="BrushBorderActive" Color="{StaticResource ColorBorderActive}" />
+        <SolidColorBrush x:Key="BrushPurple" Color="{StaticResource ColorPurple}" />
+        <SolidColorBrush x:Key="BrushNeonGreen" Color="{StaticResource ColorNeonGreen}" />
+        <SolidColorBrush x:Key="BrushCyan" Color="{StaticResource ColorCyan}" />
+
+        <!-- 科技紫绿线性渐变画刷 -->
+        <LinearGradientBrush x:Key="BrushPurpleGreenGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Color="#7B61FF" Offset="0.0" />
+            <GradientStop Color="#00F5A0" Offset="1.0" />
+        </LinearGradientBrush>
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme />
+
+        <!-- 全局默认字体与控件圆角美化 -->
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource MainFont}" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="FontFamily" Value="{StaticResource MainFont}" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="FontFamily" Value="{StaticResource MainFont}" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="FontFamily" Value="{StaticResource MainFont}" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontFamily" Value="{StaticResource MainFont}" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <!-- 等宽数字与代码参数专用类 -->
+        <Style Selector="TextBlock.mono">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFont}" />
+        </Style>
+
+        <!-- 主操作按钮样式 (紫绿渐变发光) -->
+        <Style Selector="Button.primary-action">
+            <Setter Property="Background" Value="{StaticResource BrushPurpleGreenGradient}" />
+            <Setter Property="Foreground" Value="#0D0D12" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Padding" Value="24,10" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.primary-action:pointerover">
+            <Setter Property="Opacity" Value="0.9" />
+        </Style>
+
+        <!-- 次级功能胶囊按钮样式 -->
+        <Style Selector="Button.sub-action">
+            <Setter Property="Background" Value="#252533" />
+            <Setter Property="Foreground" Value="#E0E0E8" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSubtle}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style Selector="Button.sub-action:pointerover">
+            <Setter Property="Background" Value="#2F2F42" />
+            <Setter Property="BorderBrush" Value="{StaticResource BrushPurple}" />
+        </Style>
+
+        <!-- 危险操作按钮样式 -->
+        <Style Selector="Button.danger-action">
+            <Setter Property="Background" Value="#2A1B22" />
+            <Setter Property="Foreground" Value="#FF6B8B" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="BorderBrush" Value="#552233" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style Selector="Button.danger-action:pointerover">
+            <Setter Property="Background" Value="#3D202D" />
+            <Setter Property="BorderBrush" Value="#FF4D6D" />
+        </Style>
+
+        <!-- 现代悬浮卡片样式 -->
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="{StaticResource BrushBgCard}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSubtle}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="10" />
+        </Style>
     </Application.Styles>
 </Application>
