@@ -280,13 +280,23 @@ jobs:
           sips -z 512 512   ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_512x512.png
           iconutil -c icns ./icon.iconset -o "$APP_DIR/Contents/Resources/app.icns" || true
 
-          # 3. 压制精美的 macOS 原生 DMG 镜像
-          mkdir -p ./dmg-root
-          cp -r "$APP_DIR" ./dmg-root/
-          hdiutil create -volname "DAREU LM113" \
-            -srcfolder ./dmg-root \
-            -ov -format UDZO \
-            "./dist/Dareu-LM113-${{ matrix.name }}.dmg"
+          # 3. 压制精美的 macOS 原生 DMG 镜像（支持 Applications 快捷拖拽）
+          DMG_TMP="./Dareu-LM113-tmp.dmg"
+          DMG_FINAL="./dist/Dareu-LM113-${{ matrix.name }}.dmg"
+          rm -f "$DMG_TMP" "$DMG_FINAL"
+
+          hdiutil create -size 350m -fs HFS+ -volname "DAREU LM113" "$DMG_TMP"
+          MOUNT_OUTPUT=$(hdiutil attach "$DMG_TMP" -nobrowse -noverify)
+          MOUNT_POINT=$(echo "$MOUNT_OUTPUT" | grep -o '/Volumes/.*' | head -n 1)
+          
+          echo "Mounted DMG at: $MOUNT_POINT"
+          cp -R "$APP_DIR" "$MOUNT_POINT/"
+          ln -s /Applications "$MOUNT_POINT/Applications"
+          
+          sync
+          hdiutil detach "$MOUNT_POINT" -force
+          hdiutil convert "$DMG_TMP" -format UDZO -imagekey zlib-level=9 -o "$DMG_FINAL"
+          rm -f "$DMG_TMP"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
