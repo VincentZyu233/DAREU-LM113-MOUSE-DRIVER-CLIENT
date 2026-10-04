@@ -1,0 +1,29 @@
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+publish/
+dist/
+artifacts/
+
+## Visual Studio / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Python
+.venv/
+*/.venv/
+temp/.venv/
+**/__pycache__/
+*.pyc
+
+## OS Files
+.DS_Store
+Thumbs.db

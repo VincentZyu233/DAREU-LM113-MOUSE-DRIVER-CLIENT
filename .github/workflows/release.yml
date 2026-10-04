@@ -1,0 +1,174 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows-linux:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            name: win-x64
+            ext: .exe
+          - os: windows-latest
+            rid: win-arm64
+            name: win-arm64
+            ext: .exe
+          - os: ubuntu-latest
+            rid: linux-x64
+            name: linux-x64
+            ext: ''
+          - os: ubuntu-24.04-arm
+            rid: linux-arm64
+            name: linux-arm64
+            ext: ''
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish Single-File App
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          [ -z "$VERSION" ] && VERSION="1.0.0"
+          dotnet publish ./src/Dareu.LM113.App/Dareu.LM113.App.csproj \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:IncludeAllContentForSelfExtract=true \
+            -p:DebugType=None \
+            -p:DebugSymbols=false \
+            -o ./publish
+
+      - name: Package Windows Artifacts
+        if: startsWith(matrix.rid, 'win-')
+        shell: bash
+        run: |
+          mkdir -p ./dist
+          cd ./publish
+          zip -r "../dist/Dareu-LM113-${{ matrix.name }}.zip" ./*
+
+      - name: Package Linux Artifacts (tar.gz, deb, rpm)
+        if: startsWith(matrix.rid, 'linux-')
+        shell: bash
+        run: |
+          mkdir -p ./dist
+          VERSION=${GITHUB_REF_NAME#v}
+          [ -z "$VERSION" ] && VERSION="1.0.0"
+          
+          # 1. 基础 tar.gz
+          tar -czvf "./dist/Dareu-LM113-${{ matrix.name }}.tar.gz" -C ./publish .
+
+          # 2. 构建 deb 与 rpm (使用 fpm)
+          if [ "${{ matrix.rid }}" = "linux-x64" ]; then
+            sudo apt-get update && sudo apt-get install -y ruby ruby-dev rubygems rpm
+            sudo gem install --no-document fpm
+            
+            mkdir -p ./deb-root/usr/bin
+            mkdir -p ./deb-root/etc/udev/rules.d
+            cp ./publish/Dareu.LM113.App ./deb-root/usr/bin/dareu-lm113
+            cp ./linux/99-dareu-mouse.rules ./deb-root/etc/udev/rules.d/
+            
+            fpm -s dir -t deb -n dareu-lm113 -v "$VERSION" -a amd64 \
+              -C ./deb-root \
+              -p ./dist/dareu-lm113_${VERSION}_amd64.deb \
+              --description "DAREU LM113 Mouse Driver GUI"
+
+            fpm -s dir -t rpm -n dareu-lm113 -v "$VERSION" -a x86_64 \
+              -C ./deb-root \
+              -p ./dist/dareu-lm113-${VERSION}-1.x86_64.rpm \
+              --description "DAREU LM113 Mouse Driver GUI"
+          fi
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.name }}
+          path: ./dist/*
+
+  build-macos:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            rid: osx-arm64
+            name: osx-arm64
+          - os: macos-13
+            rid: osx-x64
+            name: osx-x64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish Single-File App
+        shell: bash
+        run: |
+          dotnet publish ./src/Dareu.LM113.App/Dareu.LM113.App.csproj \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeAllContentForSelfExtract=true \
+            -p:DebugType=None \
+            -p:DebugSymbols=false \
+            -o ./publish
+
+      - name: Package macOS App
+        shell: bash
+        run: |
+          mkdir -p ./dist
+          tar -czvf "./dist/Dareu-LM113-${{ matrix.name }}.tar.gz" -C ./publish .
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.name }}
+          path: ./dist/*
+
+  create-release:
+    needs: [build-windows-linux, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./artifacts/**/*.*
+          draft: false
+          prerelease: false
+          generate_release_notes: true

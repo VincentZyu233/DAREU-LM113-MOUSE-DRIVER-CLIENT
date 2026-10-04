@@ -1,0 +1,10 @@
+# DAREU LM113 & Sino Wealth Gaming Mice udev rules
+# Grants non-root users read/write permissions for USB HID configuration interface
+
+# Holtek / Rongteng LM113 (0x260D:0x1095)
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="260d", ATTRS{idProduct}=="1095", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="260d", ATTRS{idProduct}=="1095", MODE="0666", TAG+="uaccess"
+
+# Sino Wealth Compatible (0x258A:0x010C)
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="258a", ATTRS{idProduct}=="010c", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="258a", ATTRS{idProduct}=="010c", MODE="0666", TAG+="uaccess"

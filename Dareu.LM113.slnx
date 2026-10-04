@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Dareu.LM113.App/Dareu.LM113.App.csproj" />
+    <Project Path="src/Dareu.LM113.Cli/Dareu.LM113.Cli.csproj" />
+    <Project Path="src/Dareu.LM113.Core/Dareu.LM113.Core.csproj" />
+    <Project Path="src/Dareu.LM113.Protocol/Dareu.LM113.Protocol.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Dareu.LM113.Protocol.Tests/Dareu.LM113.Protocol.Tests.csproj" />
+  </Folder>
+</Solution>
