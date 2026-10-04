@@ -84,6 +84,13 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | `[build-artifact]` | 构建全部平台（Windows / Linux / macOS）产物，上传为 7 天 Artifact 供测试 | 否 |
 | `[build-release]` | 超集：构建全平台产物 + 自动打 Tag + 创建正式 GitHub Release 挂载全部安装包 | **是** |
 
+### 🤝 协作者署名规范 (Co-authorship)
+
+本项目遵循标准 GitHub 协同规范，凡由 AI 辅助完成的代码与文档提交，均在 Commit 信息末尾附带标准协作者签名：
+```text
+Co-authored-by: gemini-code-assist <200291788+gemini-code-assist@users.noreply.github.com>
+```
+
 ---
 
 ## 📄 开源许可证
