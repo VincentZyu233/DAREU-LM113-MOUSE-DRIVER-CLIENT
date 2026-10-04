@@ -167,7 +167,7 @@ jobs:
             chmod +x ./deb-root/usr/bin/dareu-lm113
             cp ./linux/99-dareu-mouse.rules ./deb-root/etc/udev/rules.d/
             cp ./linux/dareu-lm113.desktop ./deb-root/usr/share/applications/
-            cp ./src/Dareu.LM113.App/Assets/mouse_main.png ./deb-root/usr/share/pixmaps/dareu-lm113.png
+            cp ./linux/dareu-lm113.png ./deb-root/usr/share/pixmaps/dareu-lm113.png
             
             fpm -s dir -t deb -n dareu-lm113 -v "$APP_VERSION" -a amd64 \
               -C ./deb-root \
