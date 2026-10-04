@@ -54,24 +54,31 @@ dotnet run --project src/Dareu.LM113.Cli -- --import-p1
 
 ---
 
-## 🐧 Linux 软件包与权限配置
+## 📦 各主流平台安装包指南
 
-### 安装 DEB / RPM 包 (推荐)
-通过 GitHub Release 页面下载对应的 `.deb` 或 `.rpm` 包：
-```bash
-# Ubuntu / Debian
-sudo dpkg -i dareu-lm113_*.deb
+### 🪟 Windows
+- **MSI 安装包（推荐）**：下载 `Dareu-LM113-win-x64.msi` 或 `Dareu-LM113-win-arm64.msi`，双击一步安装，**原生支持版本覆盖安装与升级**，并在开始菜单生成快捷方式。
+- **绿色免安装包**：下载 `Dareu-LM113-win-x64.zip`，解压即跑。
 
-# Fedora / RHEL
-sudo rpm -ivh dareu-lm113-*.rpm
-```
-安装包会自动配置 `/etc/udev/rules.d/99-dareu-mouse.rules`、系统菜单快捷方式及图标。
+### 🍎 macOS
+- **DMG 镜像（推荐）**：下载 `Dareu-LM113-osx-arm64.dmg`（Apple Silicon M 系列）或 `Dareu-LM113-osx-x64.dmg`（Intel），双击打开并将“达尔优 LM113”直接拖入 `Applications` 应用程序文件夹。
+- **便携归档**：下载 `Dareu-LM113-osx-*.tar.gz`。
 
-### 手动权限配置 (使用绿色 tar.gz 时)
-```bash
-sudo cp linux/99-dareu-mouse.rules /etc/udev/rules.d/
-sudo udevadm control --reload-rules && sudo udevadm trigger
-```
+### 🐧 Linux
+- **DEB / RPM 安装包（推荐）**：
+  ```bash
+  # Ubuntu / Debian
+  sudo dpkg -i dareu-lm113_*.deb
+
+  # Fedora / RHEL
+  sudo rpm -ivh dareu-lm113-*.rpm
+  ```
+  安装包会自动配置 `/etc/udev/rules.d/99-dareu-mouse.rules`、系统菜单快捷方式及图标。
+- **手动权限配置 (使用绿色 tar.gz 时)**：
+  ```bash
+  sudo cp linux/99-dareu-mouse.rules /etc/udev/rules.d/
+  sudo udevadm control --reload-rules && sudo udevadm trigger
+  ```
 
 ---
 

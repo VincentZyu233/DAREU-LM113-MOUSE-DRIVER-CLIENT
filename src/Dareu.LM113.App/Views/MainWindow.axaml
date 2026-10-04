@@ -198,7 +198,7 @@
                                 <Grid ColumnDefinitions="*,Auto">
                                     <StackPanel Grid.Column="0" Spacing="4">
                                         <TextBlock Text="DAREU LM113 Mouse Driver Client" FontWeight="Bold" FontSize="13" Foreground="#FFFFFF" />
-                                        <TextBlock Text="版本: v0.2.0-beta.3  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
+                                        <TextBlock Text="版本: v0.2.0-beta.4  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
                                     </StackPanel>
                                     <TextBlock Grid.Column="1" Text="Crafted with ❤️ by VincentZyu &amp; Gemini" FontSize="12" Foreground="#7B61FF" VerticalAlignment="Center" FontWeight="SemiBold" />
                                 </Grid>

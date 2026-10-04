@@ -134,13 +134,32 @@ jobs:
             -p:DebugSymbols=false \
             -o ./publish
 
-      - name: Package Windows Artifacts
+      - name: Package Windows Artifacts (ZIP and MSI)
         if: startsWith(matrix.rid, 'win-')
         shell: bash
+        env:
+          APP_VERSION: ${{ needs.prepare.outputs.version }}
         run: |
           mkdir -p ./dist
           cd ./publish
           7z a -tzip "../dist/Dareu-LM113-${{ matrix.name }}.zip" ./*
+          cd ..
+
+          echo "Building MSI installer for ${{ matrix.name }}..."
+          dotnet tool install --global wix || true
+          
+          # MSI 规范版本号要求必须是数字 (Major.Minor.Build)
+          MSI_VERSION=$(echo "$APP_VERSION" | grep -oE "^[0-9]+(\.[0-9]+){1,2}" || echo "1.0.0")
+          if [[ "$MSI_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
+            MSI_VERSION="${MSI_VERSION}.0"
+          fi
+          
+          ARCH_NAME="${{ matrix.name == 'win-arm64' && 'arm64' || 'x64' }}"
+          wix build ./packaging/windows/Package.wxs \
+            -d Version="$MSI_VERSION" \
+            -d SourceExe="./publish/Dareu.LM113.App.exe" \
+            -arch "$ARCH_NAME" \
+            -o "./dist/Dareu-LM113-${{ matrix.name }}.msi"
 
       - name: Package Linux Artifacts (tar.gz, deb, rpm)
         if: startsWith(matrix.rid, 'linux-')
@@ -227,11 +246,48 @@ jobs:
             -p:DebugSymbols=false \
             -o ./publish
 
-      - name: Package macOS App
+      - name: Package macOS App Bundle and DMG
         shell: bash
+        env:
+          APP_VERSION: ${{ needs.prepare.outputs.version }}
         run: |
           mkdir -p ./dist
+
+          # 1. 基础绿色 tar.gz 归档
           tar -czvf "./dist/Dareu-LM113-${{ matrix.name }}.tar.gz" -C ./publish .
+
+          # 2. 制作 macOS 原生 App Bundle
+          APP_DIR="./Dareu LM113.app"
+          mkdir -p "$APP_DIR/Contents/MacOS"
+          mkdir -p "$APP_DIR/Contents/Resources"
+
+          cp ./publish/Dareu.LM113.App "$APP_DIR/Contents/MacOS/Dareu.LM113.App"
+          chmod +x "$APP_DIR/Contents/MacOS/Dareu.LM113.App"
+
+          sed "s/__VERSION__/$APP_VERSION/g" ./packaging/macos/Info.plist > "$APP_DIR/Contents/Info.plist"
+
+          # 从 PNG 生成 macOS 原生 app.icns 图标
+          mkdir -p ./icon.iconset
+          sips -z 16 16     ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_16x16.png
+          sips -z 32 32     ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_16x16@2x.png
+          sips -z 32 32     ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_32x32.png
+          sips -z 64 64     ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_32x32@2x.png
+          sips -z 128 128   ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_128x128.png
+          sips -z 256 256   ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_128x128@2x.png
+          sips -z 256 256   ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_256x256.png
+          sips -z 512 512   ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_256x256@2x.png
+          sips -z 512 512   ./src/Dareu.LM113.App/Assets/logo.png --out ./icon.iconset/icon_512x512.png
+          iconutil -c icns ./icon.iconset -o "$APP_DIR/Contents/Resources/app.icns" || true
+
+          # 3. 压制带 /Applications 快捷方式的标准 DMG
+          mkdir -p ./dmg-root
+          cp -r "$APP_DIR" ./dmg-root/
+          ln -s /Applications ./dmg-root/Applications
+
+          hdiutil create -volname "DAREU LM113" \
+            -srcfolder ./dmg-root \
+            -ov -format UDZO \
+            "./dist/Dareu-LM113-${{ matrix.name }}.dmg"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4

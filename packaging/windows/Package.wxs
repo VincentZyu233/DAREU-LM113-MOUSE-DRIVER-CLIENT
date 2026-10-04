@@ -1,0 +1,37 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="DAREU LM113 Mouse Driver" 
+           Manufacturer="VincentZyu" 
+           Version="$(var.Version)" 
+           UpgradeCode="46A94F1A-6BE8-4F1E-9C8F-787A5B0B7912" 
+           Scope="perMachine">
+    
+    <!-- 支持覆盖安装与跨版本无缝升级 -->
+    <MajorUpgrade DowngradeErrorMessage="已安装更高版本的 DAREU LM113 驱动客户端。" AllowSameVersionUpgrades="yes" />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="Dareu LM113">
+        <Component Id="MainExecutable" Guid="3F8D3499-1234-4C3D-9A2E-8E5D7839A201">
+          <File Id="AppExe" Source="$(var.SourceExe)" KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Component Id="AppShortcut" Guid="71B28A04-4567-4E2F-A5C1-9A3E7841B302">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="达尔优 LM113 驱动"
+                  Description="DAREU LM113 Gaming Mouse Driver"
+                  Target="[INSTALLFOLDER]Dareu.LM113.App.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\Dareu\LM113" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+
+    <Feature Id="MainFeature" Title="DAREU LM113 Driver" Level="1">
+      <ComponentRef Id="MainExecutable" />
+      <ComponentRef Id="AppShortcut" />
+    </Feature>
+  </Package>
+</Wix>
