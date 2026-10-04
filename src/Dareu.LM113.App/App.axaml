@@ -114,6 +114,32 @@
             <Setter Property="BorderBrush" Value="#FF4D6D" />
         </Style>
 
+        <!-- 导航药丸按钮样式 -->
+        <Style Selector="Button.nav-pill">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#8E8EA0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="18,8" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.15" />
+                    <BrushTransition Property="Foreground" Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.nav-pill:pointerover">
+            <Setter Property="Background" Value="#252536" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+        </Style>
+        <Style Selector="Button.nav-pill.active">
+            <Setter Property="Background" Value="{StaticResource BrushPurple}" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
         <!-- 现代悬浮卡片样式 -->
         <Style Selector="Border.card">
             <Setter Property="Background" Value="{StaticResource BrushBgCard}" />

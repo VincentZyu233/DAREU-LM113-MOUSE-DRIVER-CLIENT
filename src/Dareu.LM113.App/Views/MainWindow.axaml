@@ -49,13 +49,23 @@
             </Grid>
         </Border>
 
-        <!-- 主体全宽控制中心卡片 (移除原有空置左栏，舒展呈现) -->
+        <!-- 主体控制中心卡片 (方案 B：分段药丸导航 + 视觉树常驻 0 延迟秒切) -->
         <Border Grid.Row="1" Margin="20,16" Classes="card" Padding="18">
-            <TabControl TabStripPlacement="Top">
-                <!-- ==================== DPI 灵敏度页面 ==================== -->
-                <TabItem Header="⚡ DPI 灵敏度">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel Spacing="16" Margin="4,16,4,4">
+            <Grid RowDefinitions="Auto,*">
+                <!-- 顶部 Segmented 药丸导航栏 (点击即刻响应，无销毁卡顿) -->
+                <Border Grid.Row="0" Background="#161620" CornerRadius="8" Padding="4" HorizontalAlignment="Left" Margin="0,0,0,16">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Button Classes="nav-pill" Classes.active="{Binding IsDpiTabActive}" Content="⚡ DPI 灵敏度" Command="{Binding SwitchTabCommand}" CommandParameter="0" />
+                        <Button Classes="nav-pill" Classes.active="{Binding IsRgbTabActive}" Content="🌈 RGB 幻彩灯光" Command="{Binding SwitchTabCommand}" CommandParameter="1" />
+                        <Button Classes="nav-pill" Classes.active="{Binding IsAboutTabActive}" Content="⚙️ 系统与关于" Command="{Binding SwitchTabCommand}" CommandParameter="2" />
+                    </StackPanel>
+                </Border>
+
+                <!-- 主体内容容器 (3 个页面全预热常驻，纯 IsVisible 显隐秒切，彻底消除字体字形重复解析卡顿) -->
+                <Grid Grid.Row="1">
+                    <!-- ==================== DPI 灵敏度页面 ==================== -->
+                    <ScrollViewer IsVisible="{Binding IsDpiTabActive}" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="16" Margin="4,4,4,4">
                             <!-- 标题与副标题 -->
                             <Grid ColumnDefinitions="*,Auto">
                                 <StackPanel Grid.Column="0" Spacing="3">
@@ -94,12 +104,10 @@
                             </Border>
                         </StackPanel>
                     </ScrollViewer>
-                </TabItem>
 
-                <!-- ==================== RGB 幻彩灯光页面 ==================== -->
-                <TabItem Header="🌈 RGB 幻彩灯光">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel Spacing="16" Margin="4,16,4,4">
+                    <!-- ==================== RGB 幻彩灯光页面 ==================== -->
+                    <ScrollViewer IsVisible="{Binding IsRgbTabActive}" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="16" Margin="4,4,4,4">
                             <!-- 灯效模式与动态速度卡片 -->
                             <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
                                 <StackPanel Spacing="14">
@@ -163,12 +171,10 @@
                             </Border>
                         </StackPanel>
                     </ScrollViewer>
-                </TabItem>
 
-                <!-- ==================== 系统与跨平台说明 ==================== -->
-                <TabItem Header="⚙️ 系统与关于">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel Spacing="16" Margin="4,16,4,4">
+                    <!-- ==================== 系统与跨平台说明 ==================== -->
+                    <ScrollViewer IsVisible="{Binding IsAboutTabActive}" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="16" Margin="4,4,4,4">
                             <!-- 跨平台架构说明 -->
                             <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
                                 <StackPanel Spacing="8">
@@ -192,15 +198,15 @@
                                 <Grid ColumnDefinitions="*,Auto">
                                     <StackPanel Grid.Column="0" Spacing="4">
                                         <TextBlock Text="DAREU LM113 Mouse Driver Client" FontWeight="Bold" FontSize="13" Foreground="#FFFFFF" />
-                                        <TextBlock Text="版本: v0.2.0-beta.2  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
+                                        <TextBlock Text="版本: v0.2.0-beta.3  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
                                     </StackPanel>
                                     <TextBlock Grid.Column="1" Text="Crafted with ❤️ by VincentZyu &amp; Gemini" FontSize="12" Foreground="#7B61FF" VerticalAlignment="Center" FontWeight="SemiBold" />
                                 </Grid>
                             </Border>
                         </StackPanel>
                     </ScrollViewer>
-                </TabItem>
-            </TabControl>
+                </Grid>
+            </Grid>
         </Border>
 
         <!-- 底部状态栏与保存下发 -->

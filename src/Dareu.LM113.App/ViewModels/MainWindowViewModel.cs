@@ -42,6 +42,23 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private byte _selectedGreen = 0;
     [ObservableProperty] private byte _selectedBlue = 0;
     [ObservableProperty] private bool _swapGreenAndBlue = true; // 硬件 RBG 排布适配
+    [ObservableProperty] private int _activeTabIndex = 0; // 0: DPI, 1: RGB, 2: About
+
+    public bool IsDpiTabActive => ActiveTabIndex == 0;
+    public bool IsRgbTabActive => ActiveTabIndex == 1;
+    public bool IsAboutTabActive => ActiveTabIndex == 2;
+
+    [RelayCommand]
+    public void SwitchTab(string indexStr)
+    {
+        if (int.TryParse(indexStr, out int idx))
+        {
+            ActiveTabIndex = idx;
+            OnPropertyChanged(nameof(IsDpiTabActive));
+            OnPropertyChanged(nameof(IsRgbTabActive));
+            OnPropertyChanged(nameof(IsAboutTabActive));
+        }
+    }
 
     public ObservableCollection<DpiStageItemViewModel> DpiStages { get; } = [];
     public ObservableCollection<string> PollingRateOptions { get; } = ["1000 Hz", "500 Hz", "250 Hz", "125 Hz"];
