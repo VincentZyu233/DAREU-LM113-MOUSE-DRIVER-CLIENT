@@ -45,10 +45,10 @@ dotnet run --project src/Dareu.LM113.Cli -- --import-p1
 通过 GitHub Release 页面下载对应的 `.deb` 或 `.rpm` 包：
 ```bash
 # Ubuntu / Debian
-sudo dpkg -i dareu-lm113_1.0.0_amd64.deb
+sudo dpkg -i dareu-lm113_0.1.0_amd64.deb
 
 # Fedora / RHEL
-sudo rpm -ivh dareu-lm113-1.0.0-1.x86_64.rpm
+sudo rpm -ivh dareu-lm113-0.1.0-1.x86_64.rpm
 ```
 安装包会自动配置 `/etc/udev/rules.d/99-dareu-mouse.rules`、系统菜单快捷方式及图标。
 
