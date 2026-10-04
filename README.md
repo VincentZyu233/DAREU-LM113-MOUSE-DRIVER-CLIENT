@@ -1,6 +1,6 @@
 # DAREU LM113 达尔优发光鼠标 跨平台驱动客户端
 
-[![Build and Release](https://github.com/VincentZyu233/Dareu-LM113-Mouse-Driver/actions/workflows/release.yml/badge.svg)](https://github.com/VincentZyu233/Dareu-LM113-Mouse-Driver/actions/workflows/release.yml)
+[![Build and Release](https://github.com/VincentZyu233/dareu-lm113-driver/actions/workflows/release.yml/badge.svg)](https://github.com/VincentZyu233/dareu-lm113-driver/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 基于 **C# .NET 10** 与 **Avalonia 11** 构建的达尔优 LM113 发光鼠标（兼容荣腾 / 盛群 Holtek / 中颖方案）跨平台免驱配置工具。原生支持 **Windows**、**Linux** 与 **macOS**。
@@ -39,16 +39,35 @@ dotnet run --project src/Dareu.LM113.Cli -- --import-p1
 
 ---
 
-## 🐧 Linux 权限配置 (udev 规则)
+## 🐧 Linux 软件包与权限配置
 
-Linux 下默认仅 `root` 用户拥有原始 HID 节点的读写权限。为允许普通用户直接管理鼠标配置，请执行：
-
+### 安装 DEB / RPM 包 (推荐)
+通过 GitHub Release 页面下载对应的 `.deb` 或 `.rpm` 包：
 ```bash
-# 复制规则文件到系统
+# Ubuntu / Debian
+sudo dpkg -i dareu-lm113_1.0.0_amd64.deb
+
+# Fedora / RHEL
+sudo rpm -ivh dareu-lm113-1.0.0-1.x86_64.rpm
+```
+安装包会自动配置 `/etc/udev/rules.d/99-dareu-mouse.rules`、系统菜单快捷方式及图标。
+
+### 手动权限配置 (使用绿色 tar.gz 时)
+```bash
 sudo cp linux/99-dareu-mouse.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
-然后重新插拔鼠标即可免 `sudo` 使用。
+
+---
+
+## ⚙️ CI 触发约定 (Commit Keywords)
+
+参考自标准工程约定，在 Git Commit 消息末尾附带关键词可控制 GitHub Actions 自动化构建行为：
+
+| 🔑 关键词 | 📦 产物说明 | 🚀 发布 Release |
+|---|---|:---:|
+| `[build-artifact]` | 构建全部平台（Windows / Linux / macOS）产物，上传为 7 天 Artifact 供测试 | 否 |
+| `[build-release]` | 超集：构建全平台产物 + 自动打 Tag + 创建正式 GitHub Release 挂载全部安装包 | **是** |
 
 ---
 

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=DAREU LM113 Mouse Driver
+Comment=Configuration tool and driver for DAREU LM113 RGB Gaming Mouse
+Exec=dareu-lm113
+Icon=dareu-lm113
+Terminal=false
+Type=Application
+Categories=Utility;HardwareSettings;
+Keywords=mouse;dpi;rgb;lighting;dareu;lm113;
+StartupWMClass=Dareu.LM113.App

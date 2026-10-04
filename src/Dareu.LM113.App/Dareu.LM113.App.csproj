@@ -6,6 +6,12 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <Version>1.0.0</Version>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <Authors>VincentZyu</Authors>
+        <Product>DAREU LM113 Mouse Driver</Product>
+        <Description>Cross-platform driver and Avalonia 11 GUI for DAREU LM113 gaming mouse</Description>
     </PropertyGroup>
 
     <ItemGroup>
