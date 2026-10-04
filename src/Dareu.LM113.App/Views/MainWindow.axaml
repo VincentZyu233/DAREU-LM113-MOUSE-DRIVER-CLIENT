@@ -61,8 +61,22 @@
                     </StackPanel>
                 </Border>
 
-                <!-- 主体内容容器 (3 个页面全预热常驻，纯 IsVisible 显隐秒切，彻底消除字体字形重复解析卡顿) -->
-                <Grid Grid.Row="1">
+                <!-- 异步加载转圈圈视图 (当 IsLoadingTab 为 True 时即时显示) -->
+                <Border Grid.Row="1" IsVisible="{Binding IsLoadingTab}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,80">
+                    <StackPanel Spacing="16" HorizontalAlignment="Center">
+                        <!-- 电竞霓虹转动进度条 -->
+                        <ProgressBar IsIndeterminate="True" Width="220" Height="4" CornerRadius="2"
+                                     Foreground="{StaticResource BrushPurpleGreenGradient}" 
+                                     Background="#252536" />
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <TextBlock Text="⚡" FontSize="14" Foreground="#00F5A0" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding LoadingTitle}" Classes="mono" FontSize="13" Foreground="#B0B0C4" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 主体内容容器 (当 !IsLoadingTab 时呈现) -->
+                <Grid Grid.Row="1" IsVisible="{Binding !IsLoadingTab}">
                     <!-- ==================== DPI 灵敏度页面 ==================== -->
                     <ScrollViewer IsVisible="{Binding IsDpiTabActive}" VerticalScrollBarVisibility="Auto">
                         <StackPanel Spacing="16" Margin="4,4,4,4">
@@ -198,7 +212,7 @@
                                 <Grid ColumnDefinitions="*,Auto">
                                     <StackPanel Grid.Column="0" Spacing="4">
                                         <TextBlock Text="DAREU LM113 Mouse Driver Client" FontWeight="Bold" FontSize="13" Foreground="#FFFFFF" />
-                                        <TextBlock Text="版本: v0.2.0-beta.4  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
+                                        <TextBlock Text="版本: v0.2.0-beta.5  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
                                     </StackPanel>
                                     <TextBlock Grid.Column="1" Text="Crafted with ❤️ by VincentZyu &amp; Gemini" FontSize="12" Foreground="#7B61FF" VerticalAlignment="Center" FontWeight="SemiBold" />
                                 </Grid>

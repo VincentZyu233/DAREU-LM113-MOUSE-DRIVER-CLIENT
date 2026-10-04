@@ -43,21 +43,38 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private byte _selectedBlue = 0;
     [ObservableProperty] private bool _swapGreenAndBlue = true; // 硬件 RBG 排布适配
     [ObservableProperty] private int _activeTabIndex = 0; // 0: DPI, 1: RGB, 2: About
+    [ObservableProperty] private bool _isLoadingTab;
+    [ObservableProperty] private string _loadingTitle = "正在切换...";
 
     public bool IsDpiTabActive => ActiveTabIndex == 0;
     public bool IsRgbTabActive => ActiveTabIndex == 1;
     public bool IsAboutTabActive => ActiveTabIndex == 2;
 
     [RelayCommand]
-    public void SwitchTab(string indexStr)
+    public async Task SwitchTabAsync(string indexStr)
     {
-        if (int.TryParse(indexStr, out int idx))
+        if (!int.TryParse(indexStr, out int idx) || (idx == ActiveTabIndex && !IsLoadingTab))
+            return;
+
+        // 1. 立即给药丸按钮选中状态，并开启 Loading 视图 (0ms 即时响应)
+        ActiveTabIndex = idx;
+        IsLoadingTab = true;
+        LoadingTitle = idx switch
         {
-            ActiveTabIndex = idx;
-            OnPropertyChanged(nameof(IsDpiTabActive));
-            OnPropertyChanged(nameof(IsRgbTabActive));
-            OnPropertyChanged(nameof(IsAboutTabActive));
-        }
+            0 => "正在加载 DPI 灵敏度矩阵...",
+            1 => "正在加载 RGB 幻彩调色系统...",
+            _ => "正在加载系统与驱动信息..."
+        };
+
+        // 2. 释放 UI 线程，让按钮高亮和转圈圈能够第一时间刷新到屏幕（0ms 响应）
+        await Task.Yield();
+        await Task.Delay(100); // 100ms 极客电竞微动效缓冲，平滑过渡
+
+        // 3. 完成显隐并关闭 Loading
+        OnPropertyChanged(nameof(IsDpiTabActive));
+        OnPropertyChanged(nameof(IsRgbTabActive));
+        OnPropertyChanged(nameof(IsAboutTabActive));
+        IsLoadingTab = false;
     }
 
     public ObservableCollection<DpiStageItemViewModel> DpiStages { get; } = [];
