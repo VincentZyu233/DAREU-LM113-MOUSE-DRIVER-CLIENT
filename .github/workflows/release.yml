@@ -313,6 +313,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -326,13 +333,26 @@ jobs:
           find ./artifacts -type f -exec cp {} ./release-files/ \;
           ls -la ./release-files
 
+      - name: Render Release Notes
+        shell: bash
+        env:
+          APP_VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          COMMITS=$(git log -n 10 --oneline --no-merges)
+          python3 ./.github/scripts/render_release_notes.py \
+            --repository "${{ github.repository }}" \
+            --version "$APP_VERSION" \
+            --sha "${{ github.sha }}" \
+            --commits "$COMMITS" \
+            --output ./RELEASE_NOTES.md
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.prepare.outputs.tag_name }}
           name: "DAREU LM113 Driver ${{ needs.prepare.outputs.tag_name }}"
+          body_path: ./RELEASE_NOTES.md
           files: |
             ./release-files/*
           draft: false
           prerelease: ${{ contains(needs.prepare.outputs.version, '-') }}
-          generate_release_notes: true
