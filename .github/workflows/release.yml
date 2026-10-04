@@ -174,9 +174,10 @@ jobs:
               -p ./dist/dareu-lm113_${APP_VERSION}_amd64.deb \
               --description "DAREU LM113 Mouse Driver GUI"
 
-            fpm -s dir -t rpm -n dareu-lm113 -v "$APP_VERSION" -a x86_64 \
+            RPM_VERSION="${APP_VERSION//-/.}"
+            fpm -s dir -t rpm -n dareu-lm113 -v "$RPM_VERSION" -a x86_64 \
               -C ./deb-root \
-              -p ./dist/dareu-lm113-${APP_VERSION}-1.x86_64.rpm \
+              -p ./dist/dareu-lm113-${RPM_VERSION}-1.x86_64.rpm \
               --description "DAREU LM113 Mouse Driver GUI"
           fi
 
@@ -268,5 +269,5 @@ jobs:
           files: |
             ./release-files/*
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(needs.prepare.outputs.version, '-') }}
           generate_release_notes: true
