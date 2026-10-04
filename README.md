@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="src/Dareu.LM113.App/Assets/logo.png" alt="DAREU LM113 Logo" width="120" height="120" />
+<img src="src/Dareu.LM113.App/Assets/logo.svg" alt="DAREU LM113 Logo" width="128" height="128" />
 
 # DAREU LM113 达尔优发光鼠标 跨平台驱动客户端
 
