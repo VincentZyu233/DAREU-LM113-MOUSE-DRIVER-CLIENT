@@ -1,9 +1,16 @@
+<div align="center">
+
+<img src="src/Dareu.LM113.App/Assets/logo.png" alt="DAREU LM113 Logo" width="120" height="120" />
+
 # DAREU LM113 达尔优发光鼠标 跨平台驱动客户端
 
 [![Build and Release](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/actions/workflows/release.yml/badge.svg)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/actions/workflows/release.yml)
+[![Release](https://img.shields.io/github/v/release/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT?color=512BD4)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 基于 **C# .NET 10** 与 **Avalonia 11** 构建的达尔优 LM113 发光鼠标（兼容荣腾 / 盛群 Holtek / 中颖方案）跨平台免驱配置工具。原生支持 **Windows**、**Linux** 与 **macOS**。
+
+</div>
 
 ---
 
