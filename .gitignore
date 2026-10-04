@@ -8,21 +8,27 @@ x86/
 publish/
 dist/
 artifacts/
+deb-root/
+release-files/
 
-## Visual Studio / VS Code
+## Visual Studio / VS Code / JetBrains
 .vs/
 .vscode/
+.idea/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
 
-## Python
+## Python & Environments
 .venv/
 */.venv/
-temp/.venv/
 **/__pycache__/
 *.pyc
+
+## Temporary workspace
+temp/
+*.log
 
 ## OS Files
 .DS_Store

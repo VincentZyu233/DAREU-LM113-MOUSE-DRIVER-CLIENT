@@ -140,7 +140,7 @@ jobs:
         run: |
           mkdir -p ./dist
           cd ./publish
-          zip -r "../dist/Dareu-LM113-${{ matrix.name }}.zip" ./*
+          7z a -tzip "../dist/Dareu-LM113-${{ matrix.name }}.zip" ./*
 
       - name: Package Linux Artifacts (tar.gz, deb, rpm)
         if: startsWith(matrix.rid, 'linux-')
