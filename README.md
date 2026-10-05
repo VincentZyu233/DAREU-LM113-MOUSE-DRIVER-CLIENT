@@ -108,8 +108,8 @@ dotnet run --project src/Dareu.LM113.Cli -- --import-p1
   ```
   安装包会自动配置 `/etc/udev/rules.d/99-dareu-mouse.rules`、系统菜单快捷方式及图标。
 - **通用免安装绿色归档**：
-  [![linux-x64-tar-gz](https://img.shields.io/badge/Linux-x64.tar.gz-2E3440.svg?logo=linux&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
-  [![linux-arm64-tar-gz](https://img.shields.io/badge/Linux-ARM64.tar.gz-2E3440.svg?logo=linux&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)  
+  [![linux-x64-tar-gz](https://img.shields.io/badge/Linux-x64.tar.gz-FCC624.svg?logo=linux&logoColor=black)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
+  [![linux-arm64-tar-gz](https://img.shields.io/badge/Linux-ARM64.tar.gz-FCC624.svg?logo=linux&logoColor=black)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)  
   手动权限配置：
   ```bash
   sudo cp linux/99-dareu-mouse.rules /etc/udev/rules.d/
