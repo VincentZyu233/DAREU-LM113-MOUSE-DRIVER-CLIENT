@@ -14,11 +14,39 @@
 
 ---
 
+## 📸 界面预览 (Screenshots)
+
+### 🌟 全新跨平台现代控制中心 (Avalonia 11)
+
+| ⚡ DPI 灵敏度与回报率调节 | 🎨 RGB 炫彩灯效控制 |
+|:---:|:---:|
+| <img src="docs/screenshot/preview/preview.dpi.png" alt="DPI 调节设置" width="100%" /> | <img src="docs/screenshot/preview/preview.rgb.png" alt="RGB 灯效控制" width="100%" /> |
+
+<div align="center">
+
+**⚙️ 设备系统信息与关于**
+
+<img src="docs/screenshot/preview/preview.about.png" alt="设备关于信息" width="80%" />
+
+</div>
+
+---
+
 ## 💡 开发背景与初衷
 
 > 起因是购买这款达尔优 LM113 游戏发光鼠标后，咨询京东官方客服获取到的驱动程序仅支持 Windows 平台。然而作为一名日常重度使用 Linux 桌面的开发者，在 Linux 环境下无法调优鼠标回报率、自由配置多档 DPI 与 RGB 炫彩灯效。
 >
 > 为此，通过逆向分析原版 Windows 驱动，成功破译了底层的 USB HID 协议与荣腾（Rongteng）方案的对称混淆加密算法（密钥 `RoNgtEng`），并基于 **C# .NET 10** 与 **Avalonia 11** 从零打造了这款真正跨平台（Linux / Windows / macOS 通用）的现代化桌面客户端，让所有桌面平台用户都能享受完整自由的硬件配置体验！
+
+<details open>
+<summary><b>🔍 原厂官方 Windows 驱动程序参考界面（点击可收起）</b></summary>
+<br />
+
+| 原厂驱动首页参数配置 | 原厂驱动右下角隐藏高级设置 |
+|:---:|:---:|
+| <img src="docs/screenshot/达尔优LM113游戏发光鼠标.应用首页截图捏.png" alt="原厂驱动首页" width="100%" /> | <img src="docs/screenshot/达尔优LM113游戏发光鼠标.应用右下角角落下滑还有双击速度和鼠标滚轮速度.png" alt="原厂驱动右下角设置" width="100%" /> |
+
+</details>
 
 ---
 
