@@ -77,15 +77,28 @@ dotnet run --project src/Dareu.LM113.Cli -- --import-p1
 ## 📦 各主流平台安装包指南
 
 ### 🪟 Windows
-- **MSI 安装包（推荐）**：下载 `Dareu-LM113-win-x64.msi` 或 `Dareu-LM113-win-arm64.msi`，双击一步安装，**原生支持版本覆盖安装与升级**，并在开始菜单生成快捷方式。
-- **绿色免安装包**：下载 `Dareu-LM113-win-x64.zip`，解压即跑。
+- **MSI 安装包（推荐）**：
+  [![windows-x64-msi](https://img.shields.io/badge/Windows-x64.msi-0078D4.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTAgMGgxMS4zNzd2MTEuMzcySDB6TTEyLjYyMyAwSDI0djExLjM3MkgxMi42MjN6TTAgMTIuNjIzaDExLjM3N1YyNEgweiBNMTIuNjIzIDEyLjYyM0gyNFYyNEgxMi42MjN6IiBmaWxsPSIjZmZmIi8+PC9zdmc+)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
+  [![windows-arm64-msi](https://img.shields.io/badge/Windows-ARM64.msi-0078D4.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTAgMGgxMS4zNzd2MTEuMzcySDB6TTEyLjYyMyAwSDI0djExLjM3MkgxMi42MjN6TTAgMTIuNjIzaDExLjM3N1YyNEgweiBNMTIuNjIzIDEyLjYyM0gyNFYyNEgxMi42MjN6IiBmaWxsPSIjZmZmIi8+PC9zdmc+)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)  
+  双击一步安装，**原生支持版本覆盖安装与升级**，并在开始菜单自动生成快捷方式。
+- **绿色免安装包**：
+  [![windows-x64-zip](https://img.shields.io/badge/Windows-x64.zip-67b7d1.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTAgMGgxMS4zNzd2MTEuMzcySDB6TTEyLjYyMyAwSDI0djExLjM3MkgxMi42MjN6TTAgMTIuNjIzaDExLjM3N1YyNEgweiBNMTIuNjIzIDEyLjYyM0gyNFYyNEgxMi42MjN6IiBmaWxsPSIjZmZmIi8+PC9zdmc+)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
+  [![windows-arm64-zip](https://img.shields.io/badge/Windows-ARM64.zip-67b7d1.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTAgMGgxMS4zNzd2MTEuMzcySDB6TTEyLjYyMyAwSDI0djExLjM3MkgxMi42MjN6TTAgMTIuNjIzaDExLjM3N1YyNEgweiBNMTIuNjIzIDEyLjYyM0gyNFYyNEgxMi42MjN6IiBmaWxsPSIjZmZmIi8+PC9zdmc+)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)  
+  解压即跑，无需安装任何 .NET 运行时。
 
 ### 🍎 macOS
-- **DMG 镜像（推荐）**：下载 `Dareu-LM113-osx-arm64.dmg`（Apple Silicon M 系列）或 `Dareu-LM113-osx-x64.dmg`（Intel），双击打开并将“达尔优 LM113”直接拖入 `Applications` 应用程序文件夹。
-- **便携归档**：下载 `Dareu-LM113-osx-*.tar.gz`。
+- **DMG 镜像（推荐）**：
+  [![macos-arm64-dmg](https://img.shields.io/badge/macOS-ARM64.dmg-8E8E93.svg?logo=apple&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
+  [![macos-x64-dmg](https://img.shields.io/badge/macOS-x64.dmg-8E8E93.svg?logo=apple&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)  
+  双击打开并将“达尔优 LM113”直接拖入 `Applications` 应用程序文件夹。
+- **便携归档**：
+  [![macos-arm64-tar-gz](https://img.shields.io/badge/macOS-ARM64.tar.gz-4A4A4F.svg?logo=apple&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
+  [![macos-x64-tar-gz](https://img.shields.io/badge/macOS-x64.tar.gz-4A4A4F.svg?logo=apple&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
 
 ### 🐧 Linux
 - **DEB / RPM 安装包（推荐）**：
+  [![linux-deb](https://img.shields.io/badge/Debian%20%2F%20Ubuntu-.deb-CE0056.svg?logo=debian&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
+  [![linux-rpm](https://img.shields.io/badge/Fedora%20%2F%20RHEL-.rpm-EE0000.svg?logo=redhat&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)  
   ```bash
   # Ubuntu / Debian
   sudo dpkg -i dareu-lm113_*.deb
@@ -94,7 +107,10 @@ dotnet run --project src/Dareu.LM113.Cli -- --import-p1
   sudo rpm -ivh dareu-lm113-*.rpm
   ```
   安装包会自动配置 `/etc/udev/rules.d/99-dareu-mouse.rules`、系统菜单快捷方式及图标。
-- **手动权限配置 (使用绿色 tar.gz 时)**：
+- **通用免安装绿色归档**：
+  [![linux-x64-tar-gz](https://img.shields.io/badge/Linux-x64.tar.gz-2E3440.svg?logo=linux&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)
+  [![linux-arm64-tar-gz](https://img.shields.io/badge/Linux-ARM64.tar.gz-2E3440.svg?logo=linux&logoColor=white)](https://github.com/VincentZyu233/DAREU-LM113-MOUSE-DRIVER-CLIENT/releases/latest)  
+  手动权限配置：
   ```bash
   sudo cp linux/99-dareu-mouse.rules /etc/udev/rules.d/
   sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -110,13 +126,6 @@ dotnet run --project src/Dareu.LM113.Cli -- --import-p1
 |---|---|:---:|
 | `[build-artifact]` | 构建全部平台（Windows / Linux / macOS）产物，上传为 7 天 Artifact 供测试 | 否 |
 | `[build-release]` | 超集：构建全平台产物 + 自动打 Tag + 创建正式 GitHub Release 挂载全部安装包 | **是** |
-
-### 🤝 协作者署名规范 (Co-authorship)
-
-本项目遵循标准 GitHub 协同规范，凡由 AI 辅助完成的代码与文档提交，均在 Commit 信息末尾附带标准协作者签名：
-```text
-Co-authored-by: gemini-code-assist <200291788+gemini-code-assist@users.noreply.github.com>
-```
 
 ---
 
