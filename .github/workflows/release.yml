@@ -355,4 +355,5 @@ jobs:
           files: |
             ./release-files/*
           draft: false
-          prerelease: ${{ contains(needs.prepare.outputs.version, '-') }}
+          prerelease: false
+          make_latest: "true"
