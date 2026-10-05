@@ -48,20 +48,22 @@ public static class PacketBuilder
     }
 
     /// <summary>
-    /// 构建设置灯效颜色的报文 (CMD 0x0D)
-    /// 注：根据实机反馈，该硬件 LED 引脚顺序为 R-B-G，此处自动为上层做物理映射适配
+    /// 构建设置灯效模式、速度与亮度的报文 (原厂协议 CMD 0x0D: SetRGBLedEffect)
+    /// mode: 1 = 常亮模式 (Static), 2 = 呼吸模式 (Breathing), 3 = 霓虹模式 (Neon)
+    /// speed: 动态呼吸/变换速度 (原厂默认 4)
+    /// brightness: 亮度参数 (原厂默认 2)
     /// </summary>
-    public static byte[] BuildLightingColorPacket(byte r, byte g, byte b, bool obfuscate = false)
+    public static byte[] BuildLightingModePacket(LightingMode mode, byte speed = 4, byte brightness = 2, bool obfuscate = false)
     {
-        return BuildFeatureReport(PacketCommand.SetLightingColor, p1: r, p2: b, p3: g, obfuscate: obfuscate);
+        return BuildFeatureReport(PacketCommand.SetLightingMode, p1: (byte)mode, p2: speed, p3: brightness, obfuscate: obfuscate);
     }
 
     /// <summary>
-    /// 构建设置灯效模式与速度的报文 (CMD 0x0E)
+    /// 构建设置 DPI 档位绑定发光颜色的报文 (原厂协议 CMD 0x10: SetLED8StageColor)
     /// </summary>
-    public static byte[] BuildLightingModePacket(LightingMode mode, byte speedOrBrightness = 2, bool obfuscate = false)
+    public static byte[] BuildDpiStageColorPacket(byte stage, byte r, byte g, byte b, bool obfuscate = false)
     {
-        return BuildFeatureReport(PacketCommand.SetLightingMode, p1: (byte)mode, p2: speedOrBrightness, obfuscate: obfuscate);
+        return BuildFeatureReport(PacketCommand.SetLEDStageColor, p1: stage, p2: r, p3: g, p4: b, obfuscate: obfuscate);
     }
 
     /// <summary>

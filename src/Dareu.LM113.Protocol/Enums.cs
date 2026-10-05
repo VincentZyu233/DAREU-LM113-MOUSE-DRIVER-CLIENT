@@ -1,15 +1,13 @@
 namespace Dareu.LM113.Protocol;
 
 /// <summary>
-/// 鼠标灯效模式
+/// 鼠标灯效模式 (达尔优 LM113 原厂硬件支持的三种标准模式)
 /// </summary>
 public enum LightingMode : byte
 {
-    Off = 0,
-    Static = 1,
-    Breathing = 2,
-    Neon = 3,
-    FingerMove = 4
+    Static = 1,     // 常亮模式 (颜色由 DPI 档位颜色决定)
+    Breathing = 2,  // 呼吸模式 (颜色由 DPI 档位颜色决定)
+    Neon = 3        // 霓虹模式 (全彩流转)
 }
 
 /// <summary>
@@ -39,7 +37,7 @@ public enum MouseButton : byte
 }
 
 /// <summary>
-/// 协议命令字定义
+/// 达尔优原厂协议命令字定义
 /// </summary>
 public enum PacketCommand : byte
 {
@@ -48,11 +46,8 @@ public enum PacketCommand : byte
     SetDpi = 0x03,
     SetKeyMapping = 0x04,
     SetMacro = 0x0B,
-    SetLightingColor = 0x0D,
-    SetLightingMode = 0x0E,
-    SetKeyMatrix0 = 0x10,
-    SetKeyMatrix1 = 0x11,
-    SetKeyMatrix2 = 0x12,
-    SetKeyMatrix3 = 0x13,
+    SetLightingMode = 0x0D,   // 原厂协议：0x0D 为 SetRGBLedEffect(mode, speed, brightness)
+    SetXYSensitive = 0x0E,    // 原厂协议：0x0E 为 SetXYSensitive(x, y)
+    SetLEDStageColor = 0x10,  // 原厂协议：0x10 为 SetLED8StageColor(stage, rgb)
     QueryConfig = 0x81
 }

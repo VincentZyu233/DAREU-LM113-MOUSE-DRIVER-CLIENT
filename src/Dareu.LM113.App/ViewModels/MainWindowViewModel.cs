@@ -36,79 +36,56 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private string _deviceInfoText = "未连接";
     [ObservableProperty] private int _currentStageIndex = 2;
     [ObservableProperty] private int _selectedPollingRateIndex = 0; // 0:1000Hz, 1:500Hz, 2:250Hz, 3:125Hz
-    [ObservableProperty] private int _selectedLightingModeIndex = 2; // 0:关, 1:常亮, 2:呼吸, 3:霓虹, 4:指动
-    [ObservableProperty] private byte _lightingSpeed = 2;
-    [ObservableProperty] private byte _selectedRed = 255;
-    [ObservableProperty] private byte _selectedGreen = 0;
-    [ObservableProperty] private byte _selectedBlue = 0;
-    [ObservableProperty] private bool _swapGreenAndBlue = true; // 硬件 RBG 排布适配
+    [ObservableProperty] private LightingMode _currentLightingMode = LightingMode.Breathing;
+    [ObservableProperty] private byte _lightingSpeed = 4;
     [ObservableProperty] private int _activeTabIndex = 0; // 0: DPI, 1: RGB, 2: About
     [ObservableProperty] private bool _isLoadingTab;
     [ObservableProperty] private string _loadingTitle = "正在切换...";
 
-    public string CurrentHexColor => $"#{SelectedRed:X2}{SelectedGreen:X2}{SelectedBlue:X2}";
+    public bool IsStaticMode => CurrentLightingMode == LightingMode.Static;
+    public bool IsBreathingMode => CurrentLightingMode == LightingMode.Breathing;
+    public bool IsNeonMode => CurrentLightingMode == LightingMode.Neon;
 
-    partial void OnSelectedRedChanged(byte value)
+    public string CurrentLightingModeText => CurrentLightingMode switch
     {
-        OnPropertyChanged(nameof(CurrentHexColor));
-        TriggerAutoApplyLighting();
+        LightingMode.Static => "常亮模式",
+        LightingMode.Breathing => "呼吸模式",
+        LightingMode.Neon => "霓虹模式",
+        _ => "未知模式"
+    };
+
+    public string CurrentLightingModeDescription => CurrentLightingMode switch
+    {
+        LightingMode.Static => "保持恒定常量照明，基色由当前 DPI 档位绑定的色彩决定",
+        LightingMode.Breathing => "柔和渐明渐暗律动呼吸闪烁，基色由当前 DPI 档位绑定的色彩决定",
+        LightingMode.Neon => "全彩 RGB 流光平滑循环流转，由芯片内置算法自动跑彩虹流动",
+        _ => ""
+    };
+
+    partial void OnCurrentLightingModeChanged(LightingMode value)
+    {
+        OnPropertyChanged(nameof(IsStaticMode));
+        OnPropertyChanged(nameof(IsBreathingMode));
+        OnPropertyChanged(nameof(IsNeonMode));
+        OnPropertyChanged(nameof(CurrentLightingModeText));
+        OnPropertyChanged(nameof(CurrentLightingModeDescription));
     }
 
-    partial void OnSelectedGreenChanged(byte value)
+    [RelayCommand]
+    public async Task SelectLightingModeAsync(string modeName)
     {
-        OnPropertyChanged(nameof(CurrentHexColor));
-        TriggerAutoApplyLighting();
-    }
-
-    partial void OnSelectedBlueChanged(byte value)
-    {
-        OnPropertyChanged(nameof(CurrentHexColor));
-        TriggerAutoApplyLighting();
-    }
-
-    partial void OnSelectedLightingModeIndexChanged(int value)
-    {
-        TriggerAutoApplyLighting();
-    }
-
-    partial void OnLightingSpeedChanged(byte value)
-    {
-        TriggerAutoApplyLighting();
-    }
-
-    partial void OnSwapGreenAndBlueChanged(bool value)
-    {
-        TriggerAutoApplyLighting();
-    }
-
-    private System.Threading.CancellationTokenSource? _autoApplyCts;
-    private void TriggerAutoApplyLighting()
-    {
-        if (!IsConnected)
+        if (Enum.TryParse<LightingMode>(modeName, true, out var mode))
         {
-            StatusMessage = $"当前色彩: {CurrentHexColor} (离线实时预览模式，鼠标未连接)";
-            return;
-        }
-
-        _autoApplyCts?.Cancel();
-        _autoApplyCts = new System.Threading.CancellationTokenSource();
-        var token = _autoApplyCts.Token;
-
-        _ = Task.Run(async () =>
-        {
-            try
+            CurrentLightingMode = mode;
+            if (IsConnected)
             {
-                await Task.Delay(50, token);
-                if (!token.IsCancellationRequested)
-                {
-                    await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(async () =>
-                    {
-                        await ApplyLightingAsync();
-                    });
-                }
+                await ApplyLightingAsync();
             }
-            catch (OperationCanceledException) { }
-        }, token);
+            else
+            {
+                StatusMessage = $"已选中【{CurrentLightingModeText}】(离线预览，鼠标未连接)";
+            }
+        }
     }
 
     public bool IsDpiTabActive => ActiveTabIndex == 0;
@@ -199,21 +176,15 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        byte g = SwapGreenAndBlue ? SelectedBlue : SelectedGreen;
-        byte b = SwapGreenAndBlue ? SelectedGreen : SelectedBlue;
-
         var lighting = new LightingConfig
         {
-            Mode = (LightingMode)SelectedLightingModeIndex,
+            Mode = CurrentLightingMode,
             Speed = LightingSpeed,
-            Brightness = 3,
-            Red = SelectedRed,
-            Green = g,
-            Blue = b
+            Brightness = 2
         };
 
         bool ok = await _device.ApplyLightingAsync(lighting);
-        StatusMessage = ok ? "灯效配置已实时下发！" : "灯效下发失败，请检查连接";
+        StatusMessage = ok ? $"灯效已成功切换为【{CurrentLightingModeText}】并写入芯片！" : "灯效下发失败，请检查连接";
     }
 
     [RelayCommand]
@@ -238,12 +209,9 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             Lighting = new LightingConfig
             {
-                Mode = (LightingMode)SelectedLightingModeIndex,
+                Mode = CurrentLightingMode,
                 Speed = LightingSpeed,
-                Brightness = 3,
-                Red = SelectedRed,
-                Green = SwapGreenAndBlue ? SelectedBlue : SelectedGreen,
-                Blue = SwapGreenAndBlue ? SelectedGreen : SelectedBlue
+                Brightness = 2
             },
             DpiStages = DpiStages.Select(vm => new DpiStageConfig
             {
@@ -260,25 +228,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
         bool ok = await _device.ApplyProfileAsync(profile);
         StatusMessage = ok ? "全部设置已成功写入鼠标芯片！" : "下发失败，请重试";
-    }
-
-    [RelayCommand]
-    public void SetColorPreset(string hex)
-    {
-        if (hex.Length == 6)
-        {
-            SelectedRed = Convert.ToByte(hex[..2], 16);
-            SelectedGreen = Convert.ToByte(hex.Substring(2, 2), 16);
-            SelectedBlue = Convert.ToByte(hex.Substring(4, 2), 16);
-            if (!IsConnected)
-            {
-                StatusMessage = $"已选色彩: #{hex} (当前为离线实时预览，鼠标未连接)";
-            }
-            else
-            {
-                _ = ApplyLightingAsync();
-            }
-        }
     }
 
     [RelayCommand]
@@ -313,7 +262,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 });
             }
             CurrentStageIndex = p.CurrentStageIndex;
-            SelectedLightingModeIndex = (int)p.Lighting.Mode;
+            CurrentLightingMode = p.Lighting.Mode;
             StatusMessage = "已从原版 p1.bin 导入全部配置！";
         }
         else

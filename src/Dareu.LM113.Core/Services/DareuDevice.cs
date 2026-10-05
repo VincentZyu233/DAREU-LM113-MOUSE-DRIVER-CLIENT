@@ -104,7 +104,7 @@ public class DareuDevice : IMouseDevice
     }
 
     /// <summary>
-    /// 下发灯效设置
+    /// 下发灯效设置 (原厂 0x0D SetRGBLedEffect 报文)
     /// </summary>
     public async Task<bool> ApplyLightingAsync(LightingConfig lighting)
     {
@@ -117,15 +117,17 @@ public class DareuDevice : IMouseDevice
             if (_stream == null)
                 return false;
 
-            // 1. 设置灯效模式 (CMD 0x0E)
-            byte[] modePacket = PacketBuilder.BuildLightingModePacket(lighting.Mode, lighting.Speed);
+            // 1. 设置灯效模式与速度/亮度 (原厂 CMD 0x0D: SetRGBLedEffect)
+            byte speed = lighting.Speed > 0 ? lighting.Speed : (byte)4;
+            byte brightness = lighting.Brightness > 0 ? lighting.Brightness : (byte)2;
+            byte[] modePacket = PacketBuilder.BuildLightingModePacket(lighting.Mode, speed, brightness);
             _stream.SetFeature(modePacket);
 
-            await Task.Delay(15);
+            await Task.Delay(20);
 
-            // 2. 设置静态/基准 RGB 颜色 (CMD 0x0D)
-            byte[] colorPacket = PacketBuilder.BuildLightingColorPacket(lighting.Red, lighting.Green, lighting.Blue);
-            _stream.SetFeature(colorPacket);
+            // 2. 发送应用生效保存指令 (CMD 0x01: ApplyConfig)，确保芯片立即切换并持久化
+            byte[] applyPacket = PacketBuilder.BuildApplyConfigPacket();
+            _stream.SetFeature(applyPacket);
             return true;
         }
         catch

@@ -119,87 +119,73 @@
                         </StackPanel>
                     </ScrollViewer>
 
-                    <!-- ==================== RGB 幻彩灯光页面 ==================== -->
+                    <!-- ==================== 鼠标照明模式页面 ==================== -->
                     <ScrollViewer IsVisible="{Binding IsRgbTabActive}" VerticalScrollBarVisibility="Auto">
                         <StackPanel Spacing="16" Margin="4,4,4,4">
-                            <!-- 实时色彩光效与下发状态预览卡片 -->
+                            <!-- 当前灯效状态卡片 -->
                             <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
                                 <Grid ColumnDefinitions="Auto,*,Auto">
                                     <Border Grid.Column="0" Width="44" Height="44" CornerRadius="8" Margin="0,0,16,0"
-                                            Background="{Binding CurrentHexColor}"
-                                            BorderBrush="#40FFFFFF" BorderThickness="1"
-                                            BoxShadow="0 0 16 2 #60A855F7" />
+                                            Background="#252536"
+                                            BorderBrush="#40FFFFFF" BorderThickness="1">
+                                        <TextBlock Text="💡" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <TextBlock Text="当前调配色彩:" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
-                                            <TextBlock Text="{Binding CurrentHexColor}" Classes="mono" FontWeight="Bold" FontSize="14" Foreground="#00F5A0" />
+                                            <TextBlock Text="当前激活灯效:" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
+                                            <TextBlock Text="{Binding CurrentLightingModeText}" Classes="mono" FontWeight="Bold" FontSize="14" Foreground="#00F5A0" />
                                         </StackPanel>
-                                        <TextBlock Text="调节下方滑块或选择预设，色彩毫秒级实时联动并自动同步至鼠标" FontSize="11" Foreground="#8E8EA0" />
+                                        <TextBlock Text="{Binding CurrentLightingModeDescription}" FontSize="12" Foreground="#8E8EA0" />
                                     </StackPanel>
-                                    <Button Grid.Column="2" Classes="sub-action" Content="⚡ 手动立即写入" Command="{Binding ApplyLightingCommand}" VerticalAlignment="Center" />
+                                    <Button Grid.Column="2" Classes="sub-action" Content="⚡ 重新写入芯片" Command="{Binding ApplyLightingCommand}" VerticalAlignment="Center" />
                                 </Grid>
                             </Border>
 
-                            <!-- 灯效模式与动态速度卡片 -->
-                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
-                                <StackPanel Spacing="14">
-                                    <TextBlock Text="灯效模式与速度控制" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
-                                    <Grid ColumnDefinitions="Auto,*,Auto,160" RowDefinitions="Auto">
-                                        <TextBlock Grid.Column="0" Text="灯效模式:" VerticalAlignment="Center" Margin="0,0,12,0" FontWeight="SemiBold" />
-                                        <ComboBox Grid.Column="1" ItemsSource="{Binding LightingModeOptions}" SelectedIndex="{Binding SelectedLightingModeIndex}" HorizontalAlignment="Stretch" Margin="0,0,24,0" />
-
-                                        <TextBlock Grid.Column="2" Text="动态速度:" VerticalAlignment="Center" Margin="0,0,12,0" FontWeight="SemiBold" />
-                                        <Slider Grid.Column="3" Minimum="1" Maximum="3" Value="{Binding LightingSpeed}" IsSnapToTickEnabled="True" TickFrequency="1" VerticalAlignment="Center" />
-                                    </Grid>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- 快捷预设色彩卡片 -->
-                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
-                                <StackPanel Spacing="10">
-                                    <TextBlock Text="极客经典预设色 (点击即刻生效)" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
-                                    <WrapPanel Margin="0,4">
-                                        <Button Background="#FF1744" Content="热烈红" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Command="{Binding SetColorPresetCommand}" CommandParameter="FF0000" />
-                                        <Button Background="#00E676" Content="极客绿" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Foreground="#000000" Command="{Binding SetColorPresetCommand}" CommandParameter="00FF00" />
-                                        <Button Background="#2979FF" Content="深邃蓝" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Command="{Binding SetColorPresetCommand}" CommandParameter="0000FF" />
-                                        <Button Background="#FFEA00" Content="活力黄" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Foreground="#000000" Command="{Binding SetColorPresetCommand}" CommandParameter="FFFF00" />
-                                        <Button Background="#00E5FF" Content="赛博青" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Foreground="#000000" Command="{Binding SetColorPresetCommand}" CommandParameter="00FFFF" />
-                                        <Button Background="#D500F9" Content="幻影紫" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Command="{Binding SetColorPresetCommand}" CommandParameter="FF00FF" />
-                                        <Button Background="#FF6D00" Content="烈焰橙" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Command="{Binding SetColorPresetCommand}" CommandParameter="FF4500" />
-                                        <Button Background="#FFFFFF" Content="纯净白" Width="72" Height="34" Margin="4" CornerRadius="6" FontWeight="Bold" Foreground="#000000" Command="{Binding SetColorPresetCommand}" CommandParameter="FFFFFF" />
-                                    </WrapPanel>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- 自定义 RGB 独立色彩分量卡片 -->
-                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="自定义 RGB 三原色微调" FontWeight="Bold" FontSize="14" Foreground="#FFFFFF" />
-                                    <Grid ColumnDefinitions="36,*,50" RowDefinitions="Auto,Auto,Auto" Margin="0,4">
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="R" Foreground="#FF4D6D" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" />
-                                        <Slider Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedRed}" Margin="10,0" />
-                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedRed}" Classes="mono" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14" Foreground="#FF4D6D" />
-
-                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="G" Foreground="#00F5A0" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" />
-                                        <Slider Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedGreen}" Margin="10,0" />
-                                        <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedGreen}" Classes="mono" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14" Foreground="#00F5A0" />
-
-                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="B" Foreground="#4D96FF" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" />
-                                        <Slider Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding SelectedBlue}" Margin="10,0" />
-                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding SelectedBlue}" Classes="mono" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14" Foreground="#4D96FF" />
-                                    </Grid>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- 硬件校准与即时测试 -->
-                            <Border Background="#161620" CornerRadius="8" Padding="16,12" BorderBrush="#252536" BorderThickness="1">
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="2">
-                                        <CheckBox IsChecked="{Binding SwapGreenAndBlue}" Content="启用硬件 RBG 物理通道反转适配" FontWeight="SemiBold" FontSize="13" />
-                                        <TextBlock Text="已实测校准：达尔优 LM113 硬件 PCB 的绿与蓝通道物理互换" FontSize="11" Foreground="#8E8EA0" Margin="28,0,0,0" />
+                            <!-- 三大原厂灯效模式卡片列表 -->
+                            <Grid ColumnDefinitions="*,*,*" Margin="0,4">
+                                <!-- 卡片 1: 常亮模式 -->
+                                <Border Grid.Column="0" Margin="0,0,6,0" Background="#161620" CornerRadius="8" Padding="16" BorderBrush="#252536" BorderThickness="1">
+                                    <StackPanel Spacing="12">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="💡" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="常亮模式" FontWeight="Bold" FontSize="15" Foreground="#FFFFFF" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <TextBlock Text="鼠标灯光保持恒定常亮状态。灯光颜色完全跟随当前生效的 DPI 档位绑定色彩。" TextWrapping="Wrap" FontSize="12" Foreground="#8E8EA0" Height="50" />
+                                        <Button Classes="primary-action" Content="切换为常亮模式" HorizontalAlignment="Stretch" Command="{Binding SelectLightingModeCommand}" CommandParameter="Static" />
                                     </StackPanel>
-                                    <Button Grid.Column="1" Classes="sub-action" Content="仅测试此灯效" Command="{Binding ApplyLightingCommand}" />
-                                </Grid>
+                                </Border>
+
+                                <!-- 卡片 2: 呼吸模式 -->
+                                <Border Grid.Column="1" Margin="3,0,3,0" Background="#161620" CornerRadius="8" Padding="16" BorderBrush="#252536" BorderThickness="1">
+                                    <StackPanel Spacing="12">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="🌬️" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="呼吸模式" FontWeight="Bold" FontSize="15" Foreground="#FFFFFF" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <TextBlock Text="鼠标灯光呈柔和渐明渐暗呼吸律动。发光颜色与当前 DPI 档位联动。" TextWrapping="Wrap" FontSize="12" Foreground="#8E8EA0" Height="50" />
+                                        <Button Classes="primary-action" Content="切换为呼吸模式" HorizontalAlignment="Stretch" Command="{Binding SelectLightingModeCommand}" CommandParameter="Breathing" />
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- 卡片 3: 霓虹模式 -->
+                                <Border Grid.Column="2" Margin="6,0,0,0" Background="#161620" CornerRadius="8" Padding="16" BorderBrush="#252536" BorderThickness="1">
+                                    <StackPanel Spacing="12">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="🌈" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="霓虹模式" FontWeight="Bold" FontSize="15" Foreground="#FFFFFF" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <TextBlock Text="全彩 RGB 流光平滑渐变循环流动，由芯片硬件自带算法自动进行炫彩渲染。" TextWrapping="Wrap" FontSize="12" Foreground="#8E8EA0" Height="50" />
+                                        <Button Classes="primary-action" Content="切换为霓虹模式" HorizontalAlignment="Stretch" Command="{Binding SelectLightingModeCommand}" CommandParameter="Neon" />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <!-- 原厂硬件规范提示 -->
+                            <Border Background="#161620" CornerRadius="8" Padding="16,14" BorderBrush="#252536" BorderThickness="1">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="ℹ️ 原厂固件设计说明" FontWeight="Bold" FontSize="13" Foreground="#7B61FF" />
+                                    <TextBlock Text="达尔优 LM113 采用中颖/荣腾方案，硬件支持「常亮模式」、「呼吸模式」与「霓虹模式」三种照明形态。在常亮与呼吸模式下，基色由 DPI 面板中各档位的指示色自动供给；霓虹模式下则全自动彩虹流转。点击任一模式即可秒级直写固件生效。" TextWrapping="Wrap" FontSize="12" Foreground="#8E8EA0" />
+                                </StackPanel>
                             </Border>
                         </StackPanel>
                     </ScrollViewer>
@@ -230,7 +216,7 @@
                                 <Grid ColumnDefinitions="*,Auto">
                                     <StackPanel Grid.Column="0" Spacing="4">
                                         <TextBlock Text="DAREU LM113 Mouse Driver Client" FontWeight="Bold" FontSize="13" Foreground="#FFFFFF" />
-                                        <TextBlock Text="版本: v0.2.0-beta.5  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
+                                        <TextBlock Text="版本: v0.2.1-beta.6  |  开源许可证: MIT License" Classes="mono" FontSize="11" Foreground="#8E8EA0" />
                                     </StackPanel>
                                     <TextBlock Grid.Column="1" Text="Crafted with ❤️ by VincentZyu &amp; Gemini" FontSize="12" Foreground="#7B61FF" VerticalAlignment="Center" FontWeight="SemiBold" />
                                 </Grid>
