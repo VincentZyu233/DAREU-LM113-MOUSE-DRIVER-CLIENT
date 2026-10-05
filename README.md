@@ -16,19 +16,14 @@
 
 ## 📸 界面预览 (Screenshots)
 
-### 🌟 全新跨平台现代控制中心 (Avalonia 11)
+### ⚡ DPI 灵敏度与回报率调节
+![DPI 调节设置](docs/screenshot/preview/preview.dpi.png)
 
-| ⚡ DPI 灵敏度与回报率调节 | 🎨 RGB 炫彩灯效控制 |
-|:---:|:---:|
-| <img src="docs/screenshot/preview/preview.dpi.png" alt="DPI 调节设置" width="100%" /> | <img src="docs/screenshot/preview/preview.rgb.png" alt="RGB 灯效控制" width="100%" /> |
+### 🎨 RGB 炫彩灯效控制
+![RGB 灯效控制](docs/screenshot/preview/preview.rgb.png)
 
-<div align="center">
-
-**⚙️ 设备系统信息与关于**
-
-<img src="docs/screenshot/preview/preview.about.png" alt="设备关于信息" width="80%" />
-
-</div>
+### ⚙️ 设备系统信息与关于
+![设备关于信息](docs/screenshot/preview/preview.about.png)
 
 ---
 
