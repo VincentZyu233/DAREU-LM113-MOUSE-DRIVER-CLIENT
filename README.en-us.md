@@ -35,12 +35,8 @@ Cross-platform driverless configuration utility for DAREU LM113 gaming mouse (co
 >
 > To solve this, by reverse engineering the original Windows driver, the underlying USB HID protocol and symmetric obfuscation encryption algorithm (key `RoNgtEng`) of the Rongteng solution were successfully decoded. Built from scratch with **C# .NET 10** and **Avalonia 11**, this modern cross-platform desktop client empowers users on all platforms (Linux / Windows / macOS) to enjoy complete hardware customization!
 
-<details open>
-<summary><b>🔍 Official Windows Driver Reference Interface (Click to collapse)</b></summary>
-
+### 🔍 Official Windows Driver Reference Interface
 ![Official Driver Home](docs/screenshot/达尔优LM113游戏发光鼠标.应用首页截图捏.png)
-
-</details>
 
 ---
 

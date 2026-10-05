@@ -35,12 +35,8 @@
 >
 > 为此，通过逆向分析原版 Windows 驱动，成功破译了底层的 USB HID 协议与荣腾（Rongteng）方案的对称混淆加密算法（密钥 `RoNgtEng`），并基于 **C# .NET 10** 与 **Avalonia 11** 从零打造了这款真正跨平台（Linux / Windows / macOS 通用）的现代化桌面客户端，让所有桌面平台用户都能享受完整自由的硬件配置体验！
 
-<details open>
-<summary><b>🔍 原厂官方 Windows 驱动程序参考界面（点击可收起）</b></summary>
-
+### 🔍 原厂官方 Windows 驱动程序参考界面
 ![原厂官方驱动首页](docs/screenshot/达尔优LM113游戏发光鼠标.应用首页截图捏.png)
-
-</details>
 
 ---
 
