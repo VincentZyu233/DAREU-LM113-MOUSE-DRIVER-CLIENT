@@ -35,11 +35,8 @@
 
 <details open>
 <summary><b>🔍 原厂官方 Windows 驱动程序参考界面（点击可收起）</b></summary>
-<br />
 
-| 原厂驱动首页参数配置 | 原厂驱动右下角隐藏高级设置 |
-|:---:|:---:|
-| <img src="docs/screenshot/达尔优LM113游戏发光鼠标.应用首页截图捏.png" alt="原厂驱动首页" width="100%" /> | <img src="docs/screenshot/达尔优LM113游戏发光鼠标.应用右下角角落下滑还有双击速度和鼠标滚轮速度.png" alt="原厂驱动右下角设置" width="100%" /> |
+![原厂官方驱动首页](docs/screenshot/达尔优LM113游戏发光鼠标.应用首页截图捏.png)
 
 </details>
 
