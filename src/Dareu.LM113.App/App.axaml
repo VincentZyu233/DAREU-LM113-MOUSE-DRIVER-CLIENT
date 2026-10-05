@@ -4,9 +4,9 @@
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
-        <!-- 字体体系：嵌入 HarmonyOS Sans SC 与 JetBrains Mono，全平台高质感排版 -->
-        <FontFamily x:Key="MainFont">avares://Dareu.LM113.App/Assets/Fonts#HarmonyOS Sans SC, HarmonyOS Sans SC, MiSans, Microsoft YaHei UI, PingFang SC, Noto Sans CJK SC, sans-serif</FontFamily>
-        <FontFamily x:Key="MonoFont">avares://Dareu.LM113.App/Assets/Fonts#JetBrains Mono, Cascadia Code, Consolas, monospace</FontFamily>
+        <!-- 字体体系：全平台原生现代无衬线与等宽字体回退链，杜绝 SkiaSharp 嵌入流内存越界 -->
+        <FontFamily x:Key="MainFont">Segoe UI, -apple-system, BlinkMacSystemFont, Microsoft YaHei UI, HarmonyOS Sans SC, PingFang SC, Noto Sans CJK SC, sans-serif</FontFamily>
+        <FontFamily x:Key="MonoFont">Cascadia Code, Consolas, JetBrains Mono, monospace</FontFamily>
 
         <!-- 达尔优品牌专属色彩体系 (科技深紫 + 极客霓虹绿) -->
         <Color x:Key="ColorBgDeep">#13131A</Color>

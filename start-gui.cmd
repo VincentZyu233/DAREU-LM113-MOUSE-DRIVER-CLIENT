@@ -1,2 +1,3 @@
 @echo off
-start "" "%~dp0dist\win-x64\Dareu.LM113.App.exe"
+cd /d "%~dp0dist\win-x64"
+start "" "Dareu.LM113.App.exe"

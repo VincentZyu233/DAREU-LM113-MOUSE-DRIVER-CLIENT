@@ -46,6 +46,71 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private bool _isLoadingTab;
     [ObservableProperty] private string _loadingTitle = "正在切换...";
 
+    public string CurrentHexColor => $"#{SelectedRed:X2}{SelectedGreen:X2}{SelectedBlue:X2}";
+
+    partial void OnSelectedRedChanged(byte value)
+    {
+        OnPropertyChanged(nameof(CurrentHexColor));
+        TriggerAutoApplyLighting();
+    }
+
+    partial void OnSelectedGreenChanged(byte value)
+    {
+        OnPropertyChanged(nameof(CurrentHexColor));
+        TriggerAutoApplyLighting();
+    }
+
+    partial void OnSelectedBlueChanged(byte value)
+    {
+        OnPropertyChanged(nameof(CurrentHexColor));
+        TriggerAutoApplyLighting();
+    }
+
+    partial void OnSelectedLightingModeIndexChanged(int value)
+    {
+        TriggerAutoApplyLighting();
+    }
+
+    partial void OnLightingSpeedChanged(byte value)
+    {
+        TriggerAutoApplyLighting();
+    }
+
+    partial void OnSwapGreenAndBlueChanged(bool value)
+    {
+        TriggerAutoApplyLighting();
+    }
+
+    private System.Threading.CancellationTokenSource? _autoApplyCts;
+    private void TriggerAutoApplyLighting()
+    {
+        if (!IsConnected)
+        {
+            StatusMessage = $"当前色彩: {CurrentHexColor} (离线实时预览模式，鼠标未连接)";
+            return;
+        }
+
+        _autoApplyCts?.Cancel();
+        _autoApplyCts = new System.Threading.CancellationTokenSource();
+        var token = _autoApplyCts.Token;
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(50, token);
+                if (!token.IsCancellationRequested)
+                {
+                    await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(async () =>
+                    {
+                        await ApplyLightingAsync();
+                    });
+                }
+            }
+            catch (OperationCanceledException) { }
+        }, token);
+    }
+
     public bool IsDpiTabActive => ActiveTabIndex == 0;
     public bool IsRgbTabActive => ActiveTabIndex == 1;
     public bool IsAboutTabActive => ActiveTabIndex == 2;
@@ -84,7 +149,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         InitDefaultStages();
-        _ = AutoConnectAsync();
+        _ = Task.Run(AutoConnectAsync);
     }
 
     private void InitDefaultStages()
@@ -111,7 +176,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task AutoConnectAsync()
     {
         StatusMessage = "正在扫描达尔优 LM113 鼠标...";
-        bool ok = await _device.ConnectAsync();
+        bool ok = await Task.Run(() => _device.ConnectAsync());
         IsConnected = ok;
         if (ok)
         {
@@ -205,7 +270,14 @@ public partial class MainWindowViewModel : ViewModelBase
             SelectedRed = Convert.ToByte(hex[..2], 16);
             SelectedGreen = Convert.ToByte(hex.Substring(2, 2), 16);
             SelectedBlue = Convert.ToByte(hex.Substring(4, 2), 16);
-            _ = ApplyLightingAsync();
+            if (!IsConnected)
+            {
+                StatusMessage = $"已选色彩: #{hex} (当前为离线实时预览，鼠标未连接)";
+            }
+            else
+            {
+                _ = ApplyLightingAsync();
+            }
         }
     }
 
